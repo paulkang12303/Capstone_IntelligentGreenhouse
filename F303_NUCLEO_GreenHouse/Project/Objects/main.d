@@ -37,3 +37,4 @@
 .\objects\main.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\main.o: ..\User\systick\systick.h
 .\objects\main.o: ..\User\sensors_h\I2C_gpio.h
+.\objects\main.o: ..\User\sensors_h\I2C_sensors.h

@@ -555,6 +555,11 @@
               <FileType>1</FileType>
               <FilePath>..\User\sensors\I2C_gpio.c</FilePath>
             </File>
+            <File>
+              <FileName>I2C_sensors.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\sensors\I2C_sensors.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
