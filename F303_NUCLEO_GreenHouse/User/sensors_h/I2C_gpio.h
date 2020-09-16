@@ -3,30 +3,48 @@
 
 #include "stm32f30x.h"
 
+#define LIBRARY_FUNCTION 	0
+
+#define I2C_WR				0
+#define I2C_RD				1
+
 /* Define the I2C Pins for SENSOR_1 */
-#define SENSOR_1_I2C_GPIO_CLK			 		RCC_AHBPeriph_GPIOA
-#define SENSOR_1_I2C_GPIO_PORT					GPIOA
-#define SENSOR_1_I2C_SCL_PIN					GPIO_Pin_9
-#define SENSOR_1_I2C_SDA_PIN					GPIO_Pin_10
+#define I2C_BUS_1_GPIO_CLK			 		RCC_AHBPeriph_GPIOA
+#define I2C_BUS_1_GPIO_PORT					GPIOA
+#define I2C_BUS_1_SCL_PIN					GPIO_Pin_9
+#define I2C_BUS_1_SDA_PIN					GPIO_Pin_10
 
-/* Set or Reset SCL for SENSOR_1*/
-#define SENSOR_1_I2C_SCL_1()  GPIO_SetBits(SENSOR_1_I2C_GPIO_PORT, SENSOR_1_I2C_SCL_PIN)
-#define SENSOR_1_I2C_SCL_0()  GPIO_ResetBits(SENSOR_1_I2C_GPIO_PORT, SENSOR_1_I2C_SCL_PIN)
-/* Set or Reset SDA for SENSOR_1*/	
-#define SENSOR_1_I2C_SDA_1()  GPIO_SetBits(SENSOR_1_I2C_GPIO_PORT, SENSOR_1_I2C_SDA_PIN)
-#define SENSOR_1_I2C_SDA_0()  GPIO_ResetBits(SENSOR_1_I2C_GPIO_PORT, SENSOR_1_I2C_SDA_PIN)
-/* Read SDA for SENSOR_1*/	
-#define SENSOR_1_I2C_SDA_READ()  GPIO_ReadInputDataBit(SENSOR_1_I2C_GPIO_PORT, SENSOR_1_I2C_SDA_PIN)
+/* if LIBRARY_FUNCTION == 1, use library function, if LIBRARY_FUNCTION == 0, use register*/
+#ifdef LIBRARY_FUNCTION
+	/* Set or Reset SCL for SENSOR_1*/
+	#define I2C_BUS_1_SCL_1()  GPIO_SetBits(I2C_BUS_1_GPIO_PORT, I2C_BUS_1_SCL_PIN)
+	#define I2C_BUS_1_SCL_0()  GPIO_ResetBits(I2C_BUS_1_GPIO_PORT, I2C_BUS_1_SCL_PIN)
+	/* Set or Reset SDA for SENSOR_1*/	
+	#define I2C_BUS_1_SDA_1()  GPIO_SetBits(I2C_BUS_1_GPIO_PORT, I2C_BUS_1_SDA_PIN)
+	#define I2C_BUS_1_SDA_0()  GPIO_ResetBits(I2C_BUS_1_GPIO_PORT, I2C_BUS_1_SDA_PIN)
+	/* Read SDA for SENSOR_1*/	
+	#define I2C_BUS_1_SDA_READ()  GPIO_ReadInputDataBit(I2C_BUS_1_GPIO_PORT, I2C_BUS_1_SDA_PIN)
+#else
+	/* Set or Reset SCL for SENSOR_1*/
+	#define I2C_BUS_1_SCL_1()  I2C_BUS_1_GPIO_PORT->BSRRL = I2C_BUS_1_SCL_PIN				
+	#define I2C_BUS_1_SCL_0()  I2C_BUS_1_GPIO_PORT->BSRRH = I2C_BUS_1_SCL_PIN				
+	/* Set or Reset SDA for SENSOR_1*/
+	#define I2C_BUS_1_SDA_1()  I2C_BUS_1_GPIO_PORT->BSRRL = I2C_BUS_1_SDA_PIN				
+	#define I2C_BUS_1_SDA_0()  I2C_BUS_1_GPIO_PORT->BSRRH = I2C_BUS_1_SDA_PIN		
+	/* Read SDA for SENSOR_1*/
+	#define I2C_BUS_1_SDA_READ()  ((I2C_BUS_1_GPIO_PORT->IDR & I2C_BUS_1_SDA_PIN) != 0)	
+#endif
 
-void SENSOR_1_I2C_Start(void);
-void SENSOR_1_I2C_Stop(void);
-void SENSOR_1_I2C_SendByte(uint8_t _ucByte);
-uint8_t SENSOR_1_I2C_ReadByte(void);
-uint8_t SENSOR_1_I2C_WaitAck(void);
-void SENSOR_1_I2C_Ack(void);
-void SENSOR_1_I2C_NAck(void);
-void SENSOR_1_I2C_Config(void);
-void SENSOR_1_I2C_Reset(void);
+void 	I2C_BUS_1_Start(void);
+void 	I2C_BUS_1_Stop(void);
+void 	I2C_BUS_1_SendByte(uint8_t _ucByte);
+uint8_t I2C_BUS_1_ReadByte(void);
+uint8_t I2C_BUS_1_WaitAck(void);
+void 	I2C_BUS_1_Ack(void);
+void 	I2C_BUS_1_NAck(void);
+void 	I2C_BUS_1_Config(void);
+void 	I2C_BUS_1_Reset(void);
+uint8_t I2C_BUS_1_CheckDevice(uint8_t Address);
 
 
 

@@ -23,14 +23,22 @@ int main(void)
 	USART_Config();
 	SYSTICK_Config();
 	
-	SENSOR_1_I2C_Config();
-	SENSOR_1_I2C_Reset();
+	I2C_BUS_1_Config();
+	I2C_BUS_1_Reset();
+	
+	if (I2C_BUS_1_CheckDevice(0x44) == 0)
+	{
+		LED_TEST_ON();
+	}
 	
 	while (1)
 	{
 	SHT30_ReadData();
 	Delay_ms(1000);
 
+		
+		
+		
 	}
 }
 
