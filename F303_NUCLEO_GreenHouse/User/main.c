@@ -35,10 +35,6 @@ int main(void)
 	{
 	SHT30_ReadData();
 	Delay_ms(1000);
-
-		
-		
-		
 	}
 }
 

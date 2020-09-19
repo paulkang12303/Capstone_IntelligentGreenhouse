@@ -1,0 +1,27 @@
+
+#include "bsp_led.h"
+
+void LED_TEST_Config(void)
+{
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+	
+	LED_TEST_CLK_ENABLE();
+	
+	GPIO_InitStruct.Pin = LED_TEST_GPIO_PIN;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(LED_TEST_GPIO_PORT, &GPIO_InitStruct);
+	
+	HAL_GPIO_WritePin(LED_TEST_GPIO_PORT, LED_TEST_GPIO_PIN, GPIO_PIN_RESET);
+}
+
+void LED_TEST_ON(void)
+{
+	HAL_GPIO_WritePin(LED_TEST_GPIO_PORT, LED_TEST_GPIO_PIN, GPIO_PIN_SET);
+}
+
+void LED_TEST_OFF(void)
+{
+	HAL_GPIO_WritePin(LED_TEST_GPIO_PORT, LED_TEST_GPIO_PIN, GPIO_PIN_RESET);
+}
