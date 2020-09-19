@@ -26,11 +26,6 @@ int main(void)
 	I2C_BUS_1_Config();
 	I2C_BUS_1_Reset();
 	
-	if (I2C_BUS_1_CheckDevice(0x44) == 0)
-	{
-		LED_TEST_ON();
-	}
-	
 	while (1)
 	{
 	SHT30_ReadData();
