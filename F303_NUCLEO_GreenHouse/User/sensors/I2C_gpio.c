@@ -5,6 +5,29 @@ static void I2C_Delay(void)
 	uint8_t i;
 	for (i = 0; i < 60; i++);
 }
+
+/*I2C_BUS_1 I2C SCL & SDA setting*/
+void I2C_BUS_1_Config(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+
+	I2C_BUS_1_SCL_CLK_ENABLE();
+	I2C_BUS_1_SDA_CLK_ENABLE();
+	
+	GPIO_InitStructure.GPIO_Pin = I2C_BUS_1_SCL_PIN;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;  	
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_OD; 
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(I2C_BUS_1_SCL_PORT, &GPIO_InitStructure);
+	
+	GPIO_InitStructure.GPIO_Pin = I2C_BUS_1_SDA_PIN;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;  	
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_OD; 
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(I2C_BUS_1_SDA_PORT, &GPIO_InitStructure);
+}
 /*I2C START Signal*/
 void I2C_BUS_1_Start(void)
 {
@@ -97,21 +120,8 @@ void I2C_BUS_1_NAck(void)
 	I2C_BUS_1_SCL_0();I2C_Delay();
 	I2C_BUS_1_SDA_1();//release the I2C bus
 }
-/*SENSOR_1 I2C SCL & SDA setting*/
-void I2C_BUS_1_Config(void)
-{
-	GPIO_InitTypeDef GPIO_InitStructure;
 
-	RCC_AHBPeriphClockCmd(I2C_BUS_1_GPIO_CLK, ENABLE);
-
-	GPIO_InitStructure.GPIO_Pin = I2C_BUS_1_SCL_PIN | I2C_BUS_1_SDA_PIN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;  	
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_OD; 
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(I2C_BUS_1_GPIO_PORT, &GPIO_InitStructure);
-}
-/*SENSOR_1 I2C Reset*/
+/*I2C_BUS_1 I2C Reset*/
 void I2C_BUS_1_Reset(void)
 {
 	I2C_BUS_1_Stop();
