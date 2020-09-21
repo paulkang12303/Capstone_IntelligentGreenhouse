@@ -18,7 +18,7 @@ void SHT30_ReadData( void )
 	I2C_BUS_1_WaitAck();
 	I2C_BUS_1_Stop();
 	
-	HAL_Delay(20);		//consult the datasheet for this duration
+	HAL_Delay(20);		//consult the datasheet for this duration，since 2C06
 	
 	I2C_BUS_1_Start();
 	I2C_BUS_1_SendByte(0x89);
