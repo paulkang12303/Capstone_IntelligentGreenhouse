@@ -1,12 +1,14 @@
 #include "I2C_gpio.h"
 
-static void I2C_Delay(void)
+void us_delay(uint32_t uSec)
 {
-	uint8_t i;
-	for (i = 0; i < 30; i++);
+	while(uSec--) 
+	{
+		for(uint16_t count = 32/5; count > 0; count--);
+	}
 }
 
-/*I2C_BUS_1 I2C SCL & SDA setting*/
+/*I2C_BUS_1 I2C SCL & SDA setting (confirmed)*/
 void I2C_BUS_1_Config(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -15,42 +17,81 @@ void I2C_BUS_1_Config(void)
 	I2C_BUS_1_SDA_CLK_ENABLE();
 
 	GPIO_InitStruct.Pin = I2C_BUS_1_SCL_PIN;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;  	
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(I2C_BUS_1_SCL_PORT, &GPIO_InitStruct);
 	
 	GPIO_InitStruct.Pin = I2C_BUS_1_SDA_PIN;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;  	
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(I2C_BUS_1_SDA_PORT, &GPIO_InitStruct);
+	
+	I2C_BUS_1_Stop();
 }
 
-/*I2C START Signal*/
+/*I2C START Signal (confirmed)*/
 void I2C_BUS_1_Start(void)
 {
-	I2C_BUS_1_SDA_1();
-	I2C_BUS_1_SCL_1();I2C_Delay();
-	I2C_BUS_1_SDA_0();I2C_Delay();
-	I2C_BUS_1_SCL_0();
+	I2C_BUS_1_SCL_1();
+	I2C_BUS_1_SDA_1();us_delay(2);
+	I2C_BUS_1_SDA_0();us_delay(2);
+	I2C_BUS_1_SCL_0();us_delay(2);
 }
-/*I2C STOP Signal*/
+/*I2C STOP Signal (confirmed)*/
 void I2C_BUS_1_Stop(void)
 {
 	I2C_BUS_1_SCL_0();
-	I2C_BUS_1_SDA_0();I2C_Delay();
-	I2C_BUS_1_SCL_1();I2C_Delay();
-	I2C_BUS_1_SDA_1();
+	I2C_BUS_1_SDA_0();us_delay(2);
+	I2C_BUS_1_SCL_1();us_delay(2);
+	I2C_BUS_1_SDA_1();us_delay(2);
+}
+/*I2C Wait Ack*/
+uint8_t I2C_BUS_1_WaitAck(void)
+{
+	uint8_t ErrTime = 0;
+
+	I2C_BUS_1_SDA_1();us_delay(2);
+	I2C_BUS_1_SCL_1();us_delay(2);
+	while (I2C_BUS_1_SDA_READ())	//if SDA is low, ack is received.
+	{
+		ErrTime++;
+		if(ErrTime > 250)
+		{
+			return 1;
+		}
+	}
+	I2C_BUS_1_SCL_0();us_delay(2);
+	
+	return 0;
+}
+/*I2C Send Ack*/
+void I2C_BUS_1_Ack(void)
+{
+	I2C_BUS_1_SCL_0();
+	I2C_BUS_1_SDA_0();us_delay(2);
+	I2C_BUS_1_SCL_1();us_delay(2);	
+	I2C_BUS_1_SCL_0();us_delay(2);
+	I2C_BUS_1_SDA_1();us_delay(2);
+}
+/*I2C Send NAck*/
+void I2C_BUS_1_NAck(void)
+{
+	I2C_BUS_1_SCL_0();
+	I2C_BUS_1_SDA_1();us_delay(2);
+	I2C_BUS_1_SCL_1();us_delay(2);	
+	I2C_BUS_1_SCL_0();us_delay(2);
 }
 /*I2C Send Byte*/
 void I2C_BUS_1_SendByte(uint8_t TxByte)
 {
 	uint8_t i;
-
+	
+	I2C_BUS_1_SCL_0();
 	for (i = 0; i < 8; i++)
 	{		
-		if (TxByte & 0x80)
+		if ((TxByte & 0x80)>>7)
 		{
 			I2C_BUS_1_SDA_1();
 		}
@@ -58,16 +99,12 @@ void I2C_BUS_1_SendByte(uint8_t TxByte)
 		{
 			I2C_BUS_1_SDA_0();
 		}
-		I2C_Delay();
-		I2C_BUS_1_SCL_1();
-		I2C_Delay();	
-		I2C_BUS_1_SCL_0();
-		I2C_Delay();
-		if (i == 7)
-		{
-			I2C_BUS_1_SDA_1(); 
-		}
 		TxByte <<= 1;
+		us_delay(2);
+		I2C_BUS_1_SCL_1();
+		us_delay(2);
+		I2C_BUS_1_SCL_0();
+		us_delay(2);		
 	}
 }
 /*I2C Read Byte*/
@@ -78,56 +115,18 @@ uint8_t I2C_BUS_1_ReadByte(void)
 
 	for (i = 0; i < 8; i++)
 	{
-		RxByte <<= 1;
-		I2C_BUS_1_SCL_1();I2C_Delay();
-		if (I2C_BUS_1_SDA_READ())
+		I2C_BUS_1_SCL_0();us_delay(2);
+		I2C_BUS_1_SCL_1();
+		RxByte = RxByte << 1;
+		if(I2C_BUS_1_SDA_READ())
 		{
 			RxByte++;
 		}
-		I2C_BUS_1_SCL_0();I2C_Delay();
+		us_delay(2);
 	}
 	return RxByte;
 }
-/*I2C Wait Ack*/
-uint8_t I2C_BUS_1_WaitAck(void)
-{
-	uint8_t feedback;
 
-	I2C_BUS_1_SDA_1();I2C_Delay();
-	I2C_BUS_1_SCL_1();I2C_Delay();
-	if (I2C_BUS_1_SDA_READ())	
-	{
-		feedback = 1;
-	}
-	else
-	{
-		feedback = 0;
-	}
-	I2C_BUS_1_SCL_0();I2C_Delay();
-
-	return feedback;
-}
-/*I2C Send Ack*/
-void I2C_BUS_1_Ack(void)
-{
-	I2C_BUS_1_SDA_0();I2C_Delay();
-	I2C_BUS_1_SCL_1();I2C_Delay();	
-	I2C_BUS_1_SCL_0();I2C_Delay();
-	I2C_BUS_1_SDA_1();//release the I2C bus
-}
-/*I2C Send NAck*/
-void I2C_BUS_1_NAck(void)
-{
-	I2C_BUS_1_SDA_1();I2C_Delay();
-	I2C_BUS_1_SCL_1();I2C_Delay();	
-	I2C_BUS_1_SCL_0();I2C_Delay();
-	I2C_BUS_1_SDA_1();//release the I2C bus
-}
-/*I2C_BUS_1 I2C Reset*/
-void I2C_BUS_1_Reset(void)
-{
-	I2C_BUS_1_Stop();
-}
 
 uint8_t I2C_BUS_1_CheckDevice(uint8_t Address)
 {
@@ -140,5 +139,3 @@ uint8_t I2C_BUS_1_CheckDevice(uint8_t Address)
 	
 	return status;
 }
-
-

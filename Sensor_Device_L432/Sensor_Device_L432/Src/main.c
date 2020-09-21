@@ -10,6 +10,9 @@
 
 void SystemClock_Config(void);
 
+
+
+
 int main(void)
 {
 
@@ -19,19 +22,16 @@ int main(void)
 	LED_TEST_Config();
 	DEBUG_UART_Config();
 	I2C_BUS_1_Config();
-	I2C_BUS_1_Reset();
-	
-	LED_TEST_ON();
 	
 	if (I2C_BUS_1_CheckDevice(0x44) == 0)
 	{
-		LED_TEST_OFF();
+		LED_TEST_ON();
 	}
-
+	
 	while (1)
 	{
-	SHT30_ReadData();
-	HAL_Delay(1000);
+		SHT30_ReadData();
+		HAL_Delay(1000);
 	}
 
 }
