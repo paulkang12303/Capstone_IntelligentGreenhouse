@@ -34,7 +34,7 @@ int main(void)
 	{
 		SHT30_A_ReadData();
 		HAL_Delay(1000);
-		SHT30_B_ReadData();
+		SHT30_B_ReadData();// update in 20200921
 		HAL_Delay(1000);
 	}
 
