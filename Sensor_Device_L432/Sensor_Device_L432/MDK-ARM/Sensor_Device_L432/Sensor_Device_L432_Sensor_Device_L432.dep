@@ -1,6 +1,6 @@
 Dependencies for Project 'Sensor_Device_L432', Target 'Sensor_Device_L432': (DO NOT MODIFY !)
 F (startup_stm32l432xx.s)(0x5F64C0A3)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_Sensor_Device_L432-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include--pd "__UVISION_VERSION SETA 524" --pd "_RTE_ SETA 1" --pd "STM32L432xx SETA 1"--list startup_stm32l432xx.lst --xref -o sensor_device_l432\startup_stm32l432xx.o --depend sensor_device_l432\startup_stm32l432xx.d)
-F (../Src/main.c)(0x5F66A71E)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Sensor_Device_L432-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DUSE_HAL_DRIVER -DSTM32L432xx-o sensor_device_l432\main.o --omf_browse sensor_device_l432\main.crf --depend sensor_device_l432\main.d)
+F (../Src/main.c)(0x5F695FC2)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Sensor_Device_L432-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DUSE_HAL_DRIVER -DSTM32L432xx-o sensor_device_l432\main.o --omf_browse sensor_device_l432\main.crf --depend sensor_device_l432\main.d)
 I (../Inc/main.h)(0x5F64E75A)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h)(0x5F64C09C)
 I (../Inc/stm32l4xx_hal_conf.h)(0x5F64C09F)
@@ -36,8 +36,8 @@ I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h)(0x5F64C09C)
 I (C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588C3A14)
 I (../Inc/bsp_led.h)(0x5F64CC11)
 I (../Inc/bsp_uart.h)(0x5F65041B)
-I (../Inc/I2C_gpio.h)(0x5F66A080)
-I (../Inc/I2C_sensors.h)(0x5F650745)
+I (../Inc/I2C_gpio.h)(0x5F695E8A)
+I (../Inc/I2C_sensors.h)(0x5F695E1E)
 F (../Src/stm32l4xx_it.c)(0x5F64F89A)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Sensor_Device_L432-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DUSE_HAL_DRIVER -DSTM32L432xx-o sensor_device_l432\stm32l4xx_it.o --omf_browse sensor_device_l432\stm32l4xx_it.crf --depend sensor_device_l432\stm32l4xx_it.d)
 I (../Inc/main.h)(0x5F64E75A)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h)(0x5F64C09C)
@@ -173,8 +173,8 @@ I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h)(0x5F64C09C)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h)(0x5F64C09C)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h)(0x5F64C09C)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h)(0x5F64C09C)
-F (..\Src\I2C_gpio.c)(0x5F681489)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Sensor_Device_L432-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DUSE_HAL_DRIVER -DSTM32L432xx-o sensor_device_l432\i2c_gpio.o --omf_browse sensor_device_l432\i2c_gpio.crf --depend sensor_device_l432\i2c_gpio.d)
-I (../Inc/I2C_gpio.h)(0x5F66A080)
+F (..\Src\I2C_gpio.c)(0x5F695E8A)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Sensor_Device_L432-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DUSE_HAL_DRIVER -DSTM32L432xx-o sensor_device_l432\i2c_gpio.o --omf_browse sensor_device_l432\i2c_gpio.crf --depend sensor_device_l432\i2c_gpio.d)
+I (../Inc/I2C_gpio.h)(0x5F695E8A)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h)(0x5F64C09C)
 I (../Inc/stm32l4xx_hal_conf.h)(0x5F64C09F)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h)(0x5F64C09C)
@@ -206,9 +206,9 @@ I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h)(0x5F64C09C)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h)(0x5F64C09C)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h)(0x5F64C09C)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h)(0x5F64C09C)
-F (..\Src\I2C_sensors.c)(0x5F68168F)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Sensor_Device_L432-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DUSE_HAL_DRIVER -DSTM32L432xx-o sensor_device_l432\i2c_sensors.o --omf_browse sensor_device_l432\i2c_sensors.crf --depend sensor_device_l432\i2c_sensors.d)
-I (../Inc/I2C_sensors.h)(0x5F650745)
-I (../Inc/I2C_gpio.h)(0x5F66A080)
+F (..\Src\I2C_sensors.c)(0x5F695E89)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Sensor_Device_L432-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DUSE_HAL_DRIVER -DSTM32L432xx-o sensor_device_l432\i2c_sensors.o --omf_browse sensor_device_l432\i2c_sensors.crf --depend sensor_device_l432\i2c_sensors.d)
+I (../Inc/I2C_sensors.h)(0x5F695E1E)
+I (../Inc/I2C_gpio.h)(0x5F695E8A)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h)(0x5F64C09C)
 I (../Inc/stm32l4xx_hal_conf.h)(0x5F64C09F)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h)(0x5F64C09C)

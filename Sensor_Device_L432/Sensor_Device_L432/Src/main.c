@@ -22,6 +22,8 @@ int main(void)
 	LED_TEST_Config();
 	DEBUG_UART_Config();
 	I2C_BUS_1_Config();
+	I2C_BUS_2_Config();
+	
 	
 	if (I2C_BUS_1_CheckDevice(0x44) == 0)
 	{
@@ -30,7 +32,9 @@ int main(void)
 	
 	while (1)
 	{
-		SHT30_ReadData();
+		SHT30_A_ReadData();
+		HAL_Delay(1000);
+		SHT30_B_ReadData();
 		HAL_Delay(1000);
 	}
 
