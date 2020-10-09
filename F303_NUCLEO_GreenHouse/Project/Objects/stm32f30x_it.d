@@ -35,4 +35,13 @@
 .\objects\stm32f30x_it.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_usart.h
 .\objects\stm32f30x_it.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_wwdg.h
 .\objects\stm32f30x_it.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_misc.h
-.\objects\stm32f30x_it.o: ..\User\systick\systick.h
+.\objects\stm32f30x_it.o: ..\FreeRTOS\include\FreeRTOS.h
+.\objects\stm32f30x_it.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\stm32f30x_it.o: ..\User\FreeRTOSConfig.h
+.\objects\stm32f30x_it.o: ..\FreeRTOS\include\projdefs.h
+.\objects\stm32f30x_it.o: ..\FreeRTOS\include\portable.h
+.\objects\stm32f30x_it.o: ..\FreeRTOS\include\deprecated_definitions.h
+.\objects\stm32f30x_it.o: ..\FreeRTOS\port\RVDS\ARM_CM4F\portmacro.h
+.\objects\stm32f30x_it.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\stm32f30x_it.o: ..\FreeRTOS\include\task.h
+.\objects\stm32f30x_it.o: ..\FreeRTOS\include\list.h

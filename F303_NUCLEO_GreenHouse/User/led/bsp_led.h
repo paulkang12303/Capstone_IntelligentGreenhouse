@@ -3,12 +3,10 @@
 
 #include "stm32f30x.h"
 
-#define	LED_TEST_CLK			RCC_AHBPeriph_GPIOA
-#define LED_TEST_GPIO			GPIOA
-#define LED_TEST_PIN			GPIO_Pin_5
+#define DEBUG_LED_PORT            GPIOA 
+#define DEBUG_LED_PIN             GPIO_Pin_5                                      
+#define DEBUG_LED_CLK_ENABLE()    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE)
 
-void LED_TEST_Config(void);
-void LED_TEST_ON(void);
-void LED_TEST_OFF(void);
+void DEBUG_LED_Config(void);
 
 #endif 

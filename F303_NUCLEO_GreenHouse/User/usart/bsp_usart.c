@@ -4,37 +4,36 @@
 
 static void NVIC_Configuration(void)
 {
-  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-	
   NVIC_InitTypeDef NVIC_InitStructure;
-  NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannel = DEBUG_USART_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 }
 
 
-void USART_Config(void)
+void DEBUG_USART_Config(void)
 {
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+  DEBUG_USART_CLK_ENABLE();
+  DEBUG_USART_GPIO_CLK_ENABLE();
 	
   GPIO_InitTypeDef GPIO_InitStructure;
+	
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;  
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;  	//PA2-Tx
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
+  GPIO_InitStructure.GPIO_Pin = DEBUG_USART_TX_PIN;
+  GPIO_Init(DEBUG_USART_TX_PORT, &GPIO_InitStructure);
 	
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;		//PA3-Rx
-  GPIO_Init(GPIOA, &GPIO_InitStructure);	
+  GPIO_InitStructure.GPIO_Pin = DEBUG_USART_RX_PIN;	
+  GPIO_Init(DEBUG_USART_RX_PORT, &GPIO_InitStructure);	
 
-  GPIO_PinAFConfig(GPIOA,GPIO_PinSource2,GPIO_AF_7);
-  GPIO_PinAFConfig(GPIOA,GPIO_PinSource3,GPIO_AF_7);
+  GPIO_PinAFConfig(DEBUG_USART_TX_PORT,DEBUG_USART_TX_PIN_SOURCE,GPIO_AF_7);
+  GPIO_PinAFConfig(DEBUG_USART_RX_PORT,DEBUG_USART_RX_PIN_SOURCE,GPIO_AF_7);
 
   USART_InitTypeDef USART_InitStructure;
   USART_InitStructure.USART_BaudRate = 115200;
@@ -43,23 +42,31 @@ void USART_Config(void)
   USART_InitStructure.USART_Parity = USART_Parity_No;
   USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-  USART_Init(USART2, &USART_InitStructure); 
+  USART_Init(DEBUG_USART_ID, &USART_InitStructure); 
   
   NVIC_Configuration();
   
-  USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
-  USART_Cmd(USART2, ENABLE);
+  USART_ITConfig(DEBUG_USART_ID, USART_IT_RXNE, ENABLE);
+  USART_Cmd(DEBUG_USART_ID, ENABLE);
 }
 
 
 int fputc(int ch, FILE *f)
 {
 
-		USART_SendData(USART2, (uint8_t) ch);
+		USART_SendData(DEBUG_USART_ID, (uint8_t) ch);
 		
-		while (USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);		
+		while (USART_GetFlagStatus(DEBUG_USART_ID, USART_FLAG_TXE) == RESET);		
 	
 		return (ch);
+}
+
+int fgetc(FILE *f)
+{
+	
+		while (USART_GetFlagStatus(DEBUG_USART_ID, USART_FLAG_RXNE) == RESET);
+
+		return (int)USART_ReceiveData(DEBUG_USART_ID);
 }
 
 
