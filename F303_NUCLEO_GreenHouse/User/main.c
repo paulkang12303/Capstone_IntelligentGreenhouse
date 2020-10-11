@@ -1,32 +1,40 @@
 
 //using STM32F303 NUCLEO Board
 
-/* Includes ------------------------------------------------------------------*/
 #include "stm32f30x.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "event_groups.h"
 
 #include "bsp_led.h"
 #include "bsp_usart.h"
 #include "bsp_key.h"
+#include "manual_controller.h"
+#include "environment_device.h"
 
- /* 创建任务句柄 */
-static TaskHandle_t AppTaskCreate_Handle = NULL;
-/* LED任务句柄 */
-static TaskHandle_t LED_Task_Handle = NULL;
-/* UART任务句柄 */
-static TaskHandle_t UART_Task_Handle = NULL;
+ /* Task Handle */
+static TaskHandle_t AllTaskCreate_Handle = NULL;
+static TaskHandle_t ManualControl_Task_Handle = NULL;
+static TaskHandle_t Alarm_Task_Handle = NULL;
+	
+static EventGroupHandle_t Event_Handle = NULL;
 
-static void AppTaskCreate(void);/* 用于创建任务 */
-static void LED_Task(void* pvParameters);/* LED_Task任务实现 */
-static void UART_Task(void* pvParameters);/* UART_Task任务实现 */
+#define KEY_MAN_EN		(0x01 << 0)
+#define KEY_LMP_ON		(0x01 << 1)
+#define KEY_SHT_UP		(0x01 << 2)
+#define KEY_SHT_DW		(0x01 << 3)
+#define KEY_CLR_ON		(0x01 << 4)
+#define KEY_HTR_ON		(0x01 << 5)
+#define KEY_CO2_ON		(0x01 << 6)
+#define KEY_FAN_ON		(0x01 << 7)
+#define KEY_SPR_ON		(0x01 << 8)
+#define KEY_ALM_ON		(0x01 << 9)
 
-
-
-
-
-
+ /* Task */
+static void AllTaskCreate(void);		//To create all tasks in this task
+static void ManualControl_Task(void* parameter);
+static void Alarm_Task(void* parameter);
 
 
 static void BSP_Init(void);
@@ -35,16 +43,21 @@ int main(void)
 {
 	BSP_Init();
 	
-	BaseType_t xReturn = pdPASS;/* 定义一个创建信息返回值，默认为pdPASS */
-	xReturn = xTaskCreate((TaskFunction_t )AppTaskCreate,  /* 任务入口函数 */
-                        (const char*    )"AppTaskCreate",/* 任务名字 */
-                        (uint16_t       )512,  /* 任务栈大小 */
-                        (void*          )NULL,/* 任务入口函数参数 */
-                        (UBaseType_t    )1, /* 任务的优先级 */
-                        (TaskHandle_t*  )&AppTaskCreate_Handle);/* 任务控制块指针 */ 
-  /* 启动任务调度 */           
-  if(pdPASS == xReturn)
-    vTaskStartScheduler();   /* 启动任务，开启调度 */
+	ALARM_Config();
+	ManualControl_KEY_Config();
+	
+	
+	BaseType_t xReturn = pdPASS;	/* Define an xReturn to receive status, default is pdPASS */
+	
+	xReturn = xTaskCreate(	(TaskFunction_t )AllTaskCreate,  
+							(const char*    )"AllTaskCreate",
+							(uint16_t       )512, 
+							(void*          )NULL,
+							(UBaseType_t    )1, 
+							(TaskHandle_t*  )&AllTaskCreate_Handle	);
+          
+  if(xReturn == pdPASS)
+    vTaskStartScheduler();   		/* Start Scheduler */
   else
     return -1;  
 }
@@ -60,60 +73,171 @@ static void BSP_Init(void)
 }
 
 
-
-static void AppTaskCreate(void)
+static void AllTaskCreate(void)
 {
-  BaseType_t xReturn = pdPASS;/* 定义一个创建信息返回值，默认为pdPASS */
+	taskENTER_CRITICAL();
+	
+	Event_Handle = xEventGroupCreate(); // create event group
+	if (Event_Handle != NULL)	
+		printf("Event_Handle Created!\r\n");
+	
+	BaseType_t xReturn = pdPASS;
+	/* To create ManualControl Task */
+	xReturn = xTaskCreate(	(TaskFunction_t )ManualControl_Task,  
+							(const char*    )"ManualControlTask",
+							(uint16_t       )512, 
+							(void*          )NULL,
+							(UBaseType_t    )3, 
+							(TaskHandle_t*  )&ManualControl_Task_Handle	);
+	if(xReturn == pdPASS)
+		printf("ManualControl_Task Created!\r\n");
+	
+	/* To create Alarm Task */
+	xReturn = xTaskCreate(	(TaskFunction_t )Alarm_Task,  
+							(const char*    )"AlarmTask",
+							(uint16_t       )512, 
+							(void*          )NULL,
+							(UBaseType_t    )2, 
+							(TaskHandle_t*  )&Alarm_Task_Handle	);
+	if(xReturn == pdPASS)
+		printf("Alarm_Task Created!\r\n");
+	
+	//	
+	//other code here
+	//
+	
+	
+	vTaskDelete(AllTaskCreate_Handle); //Delete AllTaskCreate Task
   
-  taskENTER_CRITICAL();           //进入临界区
-  
-  /* 创建LED_Task任务 */
-  xReturn = xTaskCreate((TaskFunction_t )LED_Task, /* 任务入口函数 */
-                        (const char*    )"LED_Task",/* 任务名字 */
-                        (uint16_t       )512,   /* 任务栈大小 */
-                        (void*          )NULL,	/* 任务入口函数参数 */
-                        (UBaseType_t    )2,	    /* 任务的优先级 */
-                        (TaskHandle_t*  )&LED_Task_Handle);/* 任务控制块指针 */
-  if(pdPASS == xReturn)
-    printf("创建LED_Task任务成功!\r\n");
-  
-  
-    /* 创建UART_Task任务 */
-  xReturn = xTaskCreate((TaskFunction_t )UART_Task, /* 任务入口函数 */
-                        (const char*    )"UART_Task",/* 任务名字 */
-                        (uint16_t       )512,   /* 任务栈大小 */
-                        (void*          )NULL,	/* 任务入口函数参数 */
-                        (UBaseType_t    )2,	    /* 任务的优先级 */
-                        (TaskHandle_t*  )&UART_Task_Handle);/* 任务控制块指针 */
-  if(pdPASS == xReturn)
-    printf("创建UART_Task任务成功!\r\n");
-  
-  vTaskDelete(AppTaskCreate_Handle); //删除AppTaskCreate任务
-  
-  taskEXIT_CRITICAL();            //退出临界区
+	taskEXIT_CRITICAL();
 }
 
-static void LED_Task(void* parameter)
+
+
+static void ManualControl_Task(void* parameter)
 {	
-    while (1)
-    {
-        GPIO_SetBits(DEBUG_LED_PORT,DEBUG_LED_PIN);
-        vTaskDelay(1000);   
- 
-        GPIO_ResetBits(DEBUG_LED_PORT,DEBUG_LED_PIN);    
-        vTaskDelay(1000);  	 		
-    }
+	BaseType_t ManualControlStatus = 0;
+	
+	while (1)
+	{
+		/* When KEY for MANUAL CONTROL is pressed down, MANUAL CONTROL MODE is working */
+		if(ManualControl_Key_Scan_Continue(KEY_MAN_EN_PORT,KEY_MAN_EN_PIN) == KEY_DOWN)
+		{
+			if(ManualControlStatus == 0)
+			{
+				printf("00 Manual Control Mode Start!\r\n");
+				ManualControlStatus = 1;
+			}
+			
+			/* When KEY for LAMP ON is pressed down, send this event happened */
+			if(ManualControl_Key_Scan_Continue(KEY_LMP_ON_PORT,KEY_LMP_ON_PIN) == KEY_DOWN)
+			{
+				printf("01 KEY for LAMP ON is pressed down\r\n");
+				xEventGroupSetBits(Event_Handle,KEY_LMP_ON);
+			}
+			
+			/* When KEY for SHUTTER UP is pressed down, send this event happened */
+			if(ManualControl_Key_Scan_Continue(KEY_SHT_UP_PORT,KEY_SHT_UP_PIN) == KEY_DOWN)
+			{
+				printf("02 KEY for SHUTTER UP is pressed down\r\n");
+				xEventGroupSetBits(Event_Handle,KEY_SHT_UP);
+			}
+			
+			/* When KEY for SHUTTER DOWN is pressed down, send this event happened */
+			if(ManualControl_Key_Scan_Continue(KEY_SHT_DW_PORT,KEY_SHT_DW_PIN) == KEY_DOWN)
+			{
+				printf("03 KEY for SHUTTER DOWN is pressed down\r\n");
+				xEventGroupSetBits(Event_Handle,KEY_SHT_DW);
+			}			
+			
+			/* When KEY for COOLER ON is pressed down, send this event happened */
+			if(ManualControl_Key_Scan_Continue(KEY_CLR_ON_PORT,KEY_CLR_ON_PIN) == KEY_DOWN)
+			{
+				printf("04 KEY for COOLER ON is pressed down\r\n");
+				xEventGroupSetBits(Event_Handle,KEY_CLR_ON);
+			}				
+			
+			/* When KEY for HEATER ON is pressed down, send this event happened */
+			if(ManualControl_Key_Scan_Continue(KEY_HTR_ON_PORT,KEY_HTR_ON_PIN) == KEY_DOWN)
+			{
+				printf("05 KEY for HEATER ON is pressed down\r\n");
+				xEventGroupSetBits(Event_Handle,KEY_HTR_ON);
+			}	
+			
+			/* When KEY for CO2 GENERATOR ON is pressed down, send this event happened */
+			if(ManualControl_Key_Scan_Continue(KEY_CO2_ON_PORT,KEY_CO2_ON_PIN) == KEY_DOWN)
+			{
+				printf("06 KEY for CO2 GENERATOR ON is pressed down\r\n");
+				xEventGroupSetBits(Event_Handle,KEY_CO2_ON);
+			}			
+
+			/* When KEY for FAN ON is pressed down, send this event happened */
+			if(ManualControl_Key_Scan_Continue(KEY_FAN_ON_PORT,KEY_FAN_ON_PIN) == KEY_DOWN)
+			{
+				printf("07 KEY for FAN ON is pressed down\r\n");
+				xEventGroupSetBits(Event_Handle,KEY_FAN_ON);
+			}				
+
+			/* When KEY for WATER SPRAYER ON is pressed down, send this event happened */
+			if(ManualControl_Key_Scan_Continue(KEY_SPR_ON_PORT,KEY_SPR_ON_PIN) == KEY_DOWN)
+			{
+				printf("08 KEY for WATER SPRAYER ON is pressed down\r\n");
+				xEventGroupSetBits(Event_Handle,KEY_SPR_ON);
+			}				
+			
+			/* When KEY for ALARM ON is pressed down, send this event happened */
+			if(ManualControl_Key_Scan_Continue(KEY_ALM_ON_PORT,KEY_ALM_ON_PIN) == KEY_DOWN)
+			{
+				printf("09 KEY for ALARM ON is pressed down\r\n");
+				xEventGroupSetBits(Event_Handle,KEY_ALM_ON);
+			}
+		}
+		else
+		{
+			if(ManualControlStatus == 1)
+			{
+				printf("Manual Control Mode Stop!\r\n");
+				ManualControlStatus = 0;
+			}
+		}
+		vTaskDelay(MANUAL_SCAN_TIME);
+	}
 }
 
-static void UART_Task(void* parameter)
-{	
-    while (1)
-    {
-        printf("right\r\n");
-        vTaskDelay(1000);   
- 
-        printf("great!\r\n");   
-        vTaskDelay(1000);   	 		
 
+
+
+static void Alarm_Task(void* parameter)
+{	
+	BaseType_t AlarmStatus = STATUS_OFF;
+	EventBits_t EventBits_Receive;
+	const TickType_t xTicksToWait = (MANUAL_SCAN_TIME + 100) / portTICK_PERIOD_MS; 	//Maximum Waiting Time
+  
+	while (1)
+	{
+    EventBits_Receive = xEventGroupWaitBits(Event_Handle,  
+                                  KEY_ALM_ON,
+                                  pdTRUE,   
+                                  pdTRUE,  
+                                  xTicksToWait);	//after Maximum Waiting Time, r_eve
+                        
+    if((EventBits_Receive & KEY_ALM_ON) == (KEY_ALM_ON)) 
+    {		
+		if(AlarmStatus == STATUS_OFF)
+		{
+			printf("Alarm ON\r\n");
+			ALARM_LIGHT_ON();
+			AlarmStatus = STATUS_ON;
+		}
     }
+	else
+	{
+		if(AlarmStatus == STATUS_ON)
+		{
+			printf("Alarm OFF\r\n");
+			ALARM_LIGHT_OFF();
+			AlarmStatus = STATUS_OFF;
+		}
+	}
+  }
 }
