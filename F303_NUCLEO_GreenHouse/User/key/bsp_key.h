@@ -15,6 +15,7 @@
 #define		KEY_UP			1
 
 void DEBUG_KEY_Config(void);
-uint8_t Debug_Key_Scan(GPIO_TypeDef* GPIOx,uint16_t GPIO_Pin);
+uint8_t Debug_Key_Scan_Single(GPIO_TypeDef* GPIOx,uint16_t GPIO_Pin);
+uint8_t Debug_Key_Scan_Continue(GPIO_TypeDef* GPIOx,uint16_t GPIO_Pin);
 
 #endif 

@@ -44,5 +44,11 @@
 .\objects\main.o: ..\FreeRTOS\include\mpu_wrappers.h
 .\objects\main.o: ..\FreeRTOS\include\task.h
 .\objects\main.o: ..\FreeRTOS\include\list.h
+.\objects\main.o: ..\FreeRTOS\include\event_groups.h
+.\objects\main.o: ..\FreeRTOS\include\timers.h
 .\objects\main.o: ..\User\led\bsp_led.h
 .\objects\main.o: ..\User\key\bsp_key.h
+.\objects\main.o: ..\User\peripheral_device_h\manual_controller.h
+.\objects\main.o: ..\User\peripheral_device_h\environment_device.h
+.\objects\main.o: ..\User\peripheral_device_h\uln2003_28BYJ_48.h
+.\objects\main.o: ..\User\peripheral_device_h\bsp_delay.h

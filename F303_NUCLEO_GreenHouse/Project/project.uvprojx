@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F303xe,</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Library\CMSIS\Device\ST\STM32F30x\Include;..\Library\CMSIS\Include;..\Library\STM32F30x_StdPeriph_Driver\inc;..\User;..\User\led;..\User\usart;..\FreeRTOS\include;..\FreeRTOS\port\RVDS\ARM_CM4F;..\User\key</IncludePath>
+              <IncludePath>..\Library\CMSIS\Device\ST\STM32F30x\Include;..\Library\CMSIS\Include;..\Library\STM32F30x_StdPeriph_Driver\inc;..\User;..\User\led;..\User\usart;..\FreeRTOS\include;..\FreeRTOS\port\RVDS\ARM_CM4F;..\User\key;..\User\peripheral_device_h</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -554,6 +554,26 @@
               <FileName>bsp_key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\key\bsp_key.c</FilePath>
+            </File>
+            <File>
+              <FileName>manual_controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\manual_controller.c</FilePath>
+            </File>
+            <File>
+              <FileName>environment_device.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\environment_device.c</FilePath>
+            </File>
+            <File>
+              <FileName>uln2003_28BYJ_48.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\uln2003_28BYJ_48.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\bsp_delay.c</FilePath>
             </File>
           </Files>
         </Group>

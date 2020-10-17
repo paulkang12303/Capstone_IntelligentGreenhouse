@@ -20,7 +20,7 @@ void DEBUG_KEY_Config(void)
 	GPIO_Init(KEY2_GPIO_PORT, &GPIO_InitStruct);
 }
 
-uint8_t Debug_Key_Scan(GPIO_TypeDef* GPIOx,uint16_t GPIO_Pin)
+uint8_t Debug_Key_Scan_Single(GPIO_TypeDef* GPIOx,uint16_t GPIO_Pin)
 {			
 	if(GPIO_ReadInputDataBit(GPIOx,GPIO_Pin) == 0 )  
 	{	 
@@ -29,4 +29,9 @@ uint8_t Debug_Key_Scan(GPIO_TypeDef* GPIOx,uint16_t GPIO_Pin)
 	}
 	else
 		return 1;
+}
+
+uint8_t Debug_Key_Scan_Continue(GPIO_TypeDef* GPIOx,uint16_t GPIO_Pin)
+{			
+	return GPIO_ReadInputDataBit(GPIOx,GPIO_Pin);
 }
