@@ -56,6 +56,7 @@ static EventGroupHandle_t Event_Handle = NULL;
 static void AllTaskCreate(void);		//To create all tasks in this task
 static void ManualControl_Task(void* parameter);
 static void Alarm_Task(void* parameter);
+static void Shutter_Task(void* parameter);
 
 static void BSP_Init(void);
 
