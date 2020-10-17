@@ -15,17 +15,12 @@ void SystemClock_Config(void);
 
 int main(void)
 {
+	extern uint8_t BH1750_Data[2];
+	extern float BH1750_Illumination;
 	
-	uint8_t SHT30_Data[6] = {0};
-	float SHT30_Temperature = 0;
-	float SHT30_Humidity = 0;
-	
-	uint8_t BH1750_Data[2] = {0};
-	float BH1750_Illumination = 0;
-	
-	uint8_t HDC1080_Data[4] = {0};
-	float HDC1080_Temperature = 0;
-	float HDC1080_Humidity = 0;	
+	extern uint8_t HDC1080_Data[4];
+	extern float HDC1080_Temperature;
+	extern float HDC1080_Humidity;	
 	
 	
 	HAL_Init();
@@ -34,36 +29,23 @@ int main(void)
 	LED_TEST_Config();
 	DEBUG_UART_Config();
 
-	SHT30_Config();
 	
-	
-	if (I2C_BUS_1_CheckDevice(0x44) == 0)
-	{
-		LED_TEST_ON();
-	}
+	BH1750_Config();
+	HDC1080_Config();
 	
 	while (1)
 	{
-		SHT30_Start();
-		SHT30_WaitingData_ms();
-		SHT30_ReadData(SHT30_Data);
-		SHT30_ConvertResult(SHT30_Data,&SHT30_Temperature, &SHT30_Humidity);
-		printf("SHT30: %f , %f \r\n",SHT30_Temperature,SHT30_Humidity);
-		
 		BH1750_Start();
 		BH1750_WaitingData_ms();
-		BH1750_ReadData( BH1750_Data );
-		BH1750_ConvertResult( BH1750_Data , &BH1750_Illumination);
+		BH1750_ReadData(BH1750_Data);
+		BH1750_ConvertResult(BH1750_Data,&BH1750_Illumination);
 		printf("BH1750: %f \r\n",BH1750_Illumination);
 		
-		HDC1080_Config();
 		HDC1080_Start();
 		HDC1080_WaitingData_ms();
 		HDC1080_ReadData(HDC1080_Data);
-		HDC1080_ConvertResult(HDC1080_Data,&HDC1080_Temperature, &HDC1080_Humidity);
+		HDC1080_ConvertResult(HDC1080_Data,&HDC1080_Temperature,&HDC1080_Humidity);
 		printf("HDC1080: %f , %f \r\n",HDC1080_Temperature,HDC1080_Humidity);
-		
-		
 		
 		HAL_Delay(1000);
 
