@@ -5,6 +5,8 @@
 
 #define		STATUS_OFF					0
 #define		STATUS_ON					1
+#define		MOTOR_INIT_POSITION			0
+#define		MOTOT_END_POSITION			1
 #define		MANUAL_SCAN_TIME			200
 
 

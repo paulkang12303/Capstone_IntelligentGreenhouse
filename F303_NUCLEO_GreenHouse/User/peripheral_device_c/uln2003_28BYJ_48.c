@@ -101,7 +101,7 @@ uint8_t ULN2003_ToTerminal(void)
 uint8_t ULN2003_ToInitial(void)
 {
 	ULN2003_Backword360(1);
-	return 0;
+	return 1;
 }
 
 
