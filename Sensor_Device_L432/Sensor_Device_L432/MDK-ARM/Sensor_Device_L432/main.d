@@ -37,3 +37,4 @@ sensor_device_l432\main.o: ../Inc/bsp_led.h
 sensor_device_l432\main.o: ../Inc/bsp_uart.h
 sensor_device_l432\main.o: ../Inc/I2C_gpio.h
 sensor_device_l432\main.o: ../Inc/I2C_sensors.h
+sensor_device_l432\main.o: ../Inc/Sensor_CCS811.h

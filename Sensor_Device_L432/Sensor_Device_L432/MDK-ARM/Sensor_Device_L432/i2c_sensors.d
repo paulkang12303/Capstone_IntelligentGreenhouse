@@ -1,6 +1,5 @@
 sensor_device_l432\i2c_sensors.o: ..\Src\I2C_sensors.c
 sensor_device_l432\i2c_sensors.o: ../Inc/I2C_sensors.h
-sensor_device_l432\i2c_sensors.o: ../Inc/I2C_gpio.h
 sensor_device_l432\i2c_sensors.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h
 sensor_device_l432\i2c_sensors.o: ../Inc/stm32l4xx_hal_conf.h
 sensor_device_l432\i2c_sensors.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h
@@ -33,5 +32,7 @@ sensor_device_l432\i2c_sensors.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_
 sensor_device_l432\i2c_sensors.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h
 sensor_device_l432\i2c_sensors.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h
 sensor_device_l432\i2c_sensors.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
+sensor_device_l432\i2c_sensors.o: ../Inc/I2C_gpio.h
 sensor_device_l432\i2c_sensors.o: ../Inc/bsp_uart.h
 sensor_device_l432\i2c_sensors.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+sensor_device_l432\i2c_sensors.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

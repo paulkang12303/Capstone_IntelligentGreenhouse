@@ -425,6 +425,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\I2C_sensors.c</FilePath>
             </File>
+            <File>
+              <FileName>Sensor_CCS811.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\Sensor_CCS811.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -7,6 +7,7 @@
 "sensor_device_l432\bsp_uart.o"
 "sensor_device_l432\i2c_gpio.o"
 "sensor_device_l432\i2c_sensors.o"
+"sensor_device_l432\sensor_ccs811.o"
 "sensor_device_l432\stm32l4xx_hal_tim.o"
 "sensor_device_l432\stm32l4xx_hal_tim_ex.o"
 "sensor_device_l432\stm32l4xx_hal_uart.o"

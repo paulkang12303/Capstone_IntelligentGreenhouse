@@ -7,6 +7,7 @@
 #include "bsp_uart.h"
 #include "I2C_gpio.h"
 #include "I2C_sensors.h"
+#include "Sensor_CCS811.h"
 
 void SystemClock_Config(void);
 
@@ -22,6 +23,7 @@ int main(void)
 	extern float HDC1080_Temperature;
 	extern float HDC1080_Humidity;	
 	
+	extern CCS811_Measurement CCS811;
 	
 	HAL_Init();
 	SystemClock_Config();
@@ -32,6 +34,9 @@ int main(void)
 	
 	BH1750_Config();
 	HDC1080_Config();
+	CCS811_Config();
+	
+	
 	
 	while (1)
 	{
@@ -47,7 +52,14 @@ int main(void)
 		HDC1080_ConvertResult(HDC1080_Data,&HDC1080_Temperature,&HDC1080_Humidity);
 		printf("HDC1080: %f , %f \r\n",HDC1080_Temperature,HDC1080_Humidity);
 		
-		HAL_Delay(1000);
+		CCS811GetData();
+		printf("eco2=%d  tvoc=%d id=%d\r\n", CCS811.eco2, CCS811.tvoc,CCS811.device_id);
+		CCS811ClearData();
+		
+		
+		printf("\r\n");
+		
+		HAL_Delay(2000);
 
 	}
 
