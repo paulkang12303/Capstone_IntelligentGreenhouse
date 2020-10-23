@@ -1,4 +1,4 @@
-/*/*
+/*
  *	By STM32F303 NUCLEO Board
  *	
  *	PIN Define:
@@ -205,7 +205,14 @@ static void AllTaskCreate(void)
 
 
 
-
+/* 
+ * Function:	Task_ManualControl
+ * Description: This function is for Manual Control Console.
+ *				When Manual Control Key is pressed, this task will scan the keys for each device.
+ *				This task should have a higher priority than other tasks for devices.
+ * Parameters:	None
+ * Return:		None
+ */
 static void Task_ManualControl(void* parameter)
 {	
 	BaseType_t ManualControlStatus = 0;
