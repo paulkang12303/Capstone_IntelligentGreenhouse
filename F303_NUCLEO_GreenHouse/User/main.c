@@ -32,9 +32,8 @@
 #include "bsp_led.h"
 #include "bsp_usart.h"
 #include "bsp_key.h"
-#include "manual_controller.h"
-#include "environment_device.h"
-#include "uln2003_28BYJ_48.h"
+#include "peripheral_device.h"
+
 
  /* Task Handle */
 static TaskHandle_t Task_Handle_AllTaskCreate 	= NULL;
@@ -80,15 +79,18 @@ static void BSP_Init(void)
 	DEBUG_USART_Config();
 }
 
+static void PeripheralDevices_Init(void)
+{
+	ManualControl_KEY_Config();
+	Lamp_Config();
+	ALARM_Config();
+	ULN2003_Config();
+}
+
 int main(void)
 {
 	BSP_Init();
-	
-	LampSwitch_Config();
-	ALARM_Config();
-	ManualControl_KEY_Config();
-	ULN2003_Config();
-	
+	PeripheralDevices_Init();
 	
 	BaseType_t xReturn = pdPASS;	/* Define an xReturn to receive status, default is pdPASS */
 	
@@ -215,17 +217,17 @@ static void AllTaskCreate(void)
  */
 static void Task_ManualControl(void* parameter)
 {	
-	BaseType_t ManualControlStatus = 0;
+	BaseType_t Status_ManualControl = 0;
 	
 	while (1)
 	{
 		/* When KEY for MANUAL CONTROL is pressed down, MANUAL CONTROL MODE is working */
 		if(ManualControl_Key_Scan_Continue(KEY_MAN_EN_PORT,KEY_MAN_EN_PIN) == KEY_DOWN)
 		{
-			if(ManualControlStatus == 0)
+			if(Status_ManualControl == 0)
 			{
 				printf("00 Manual Control Mode Start!\r\n");
-				ManualControlStatus = 1;
+				Status_ManualControl = 1;
 			}
 			
 			/* When KEY for LAMP ON is pressed down, send this event happened */
@@ -293,21 +295,23 @@ static void Task_ManualControl(void* parameter)
 		}
 		else
 		{
-			if(ManualControlStatus == 1)
+			if(Status_ManualControl == 1)
 			{
 				printf("Manual Control Mode Stop!\r\n");
-				ManualControlStatus = 0;
+				Status_ManualControl = 0;
 			}
 		}
 		vTaskDelay(MANUAL_SCAN_TIME);
 	}
 }
 
-
-
-
-
-
+/* 
+ * Function:	Task_Lamp
+ * Description: This function is for switch on or switch off the lamp
+ *				When LAMP ON Key is pressed, lamp will be on, otherwise be off.
+ * Parameters:	None
+ * Return:		None
+ */
 static void Task_Lamp(void* parameter)
 {	
 	BaseType_t LampStatus = STATUS_OFF;
@@ -327,7 +331,7 @@ static void Task_Lamp(void* parameter)
 			if(LampStatus == STATUS_OFF)
 			{
 				printf("Lamp ON\r\n");
-				LampSwitch_ON();
+				Lamp_ON();
 				LampStatus = STATUS_ON;
 			}
 		}
@@ -336,7 +340,7 @@ static void Task_Lamp(void* parameter)
 			if(LampStatus == STATUS_ON)
 			{
 				printf("Lamp OFF\r\n");
-				LampSwitch_OFF();
+				Lamp_OFF();
 				LampStatus = STATUS_OFF;
 			}
 		}
@@ -379,7 +383,7 @@ static void Task_Shutter(void* parameter)
 				ULN2003_ToTerminal();
 			
 			//ULN2003_Delay_ms(8000);
-			LampSwitch_ON();
+			Lamp_ON();
 			//vTaskDelay(4000);
 				printf("ccccccccccccccccccccccccccccccccccccccccc\r\n");
 			
@@ -387,7 +391,7 @@ static void Task_Shutter(void* parameter)
 		else
 		{
 			printf("crrrrrrrrrrrrrrrrrrrrrrrrrrrrrrc\r\n");
-			LampSwitch_OFF();
+			Lamp_OFF();
 		}
 
 		
