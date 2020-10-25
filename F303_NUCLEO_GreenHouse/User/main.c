@@ -14,13 +14,24 @@
  *		KEY_SPR_ON: PB8
  *		KEY_ALM_ON: PB9
  *	Lamp:
- *		KEY_LMP_ON: PB10
+ *		Lamp Switch: 			PB10
  *	Stepper Motor:
  *		StepperMotor Orange:	PB11
  *		StepperMotor Yellow:	PB12
  *		StepperMotor Pink:		PB13
  *		StepperMotor Blue:		PB14
- *
+ *  Air Conditioner:
+ *      Heater Switch:			PC0
+ *		Cooler Switch:			PC1
+ *  CO2 Generator:
+ *		Generator Switch:		PB15
+ *  Ventilator:
+ *		Ventilator Switch:		PC2
+ *	Water Sprayer:
+ * 		Water Sprayer Switch:	PC3
+ *	Alarm:
+ *		Alarm light Switch:		PC4
+ *		Alarm buzzer Switch:	PC5 
  */
 
 #include "stm32f30x.h"
@@ -77,14 +88,6 @@ static void BSP_Init(void)
 	DEBUG_LED_Config();
 	DEBUG_KEY_Config();
 	DEBUG_USART_Config();
-}
-
-static void PeripheralDevices_Init(void)
-{
-	ManualControl_KEY_Config();
-	Lamp_Config();
-	ALARM_Config();
-	ULN2003_Config();
 }
 
 int main(void)
@@ -314,10 +317,11 @@ static void Task_ManualControl(void* parameter)
  */
 static void Task_Lamp(void* parameter)
 {	
-	BaseType_t LampStatus = STATUS_OFF;
 	EventBits_t EventBits_Receive;
 	const TickType_t xTicksToWait = (MANUAL_SCAN_TIME + 100) / portTICK_PERIOD_MS; 	//Maximum Waiting Time
-  
+	
+ 	BaseType_t LampStatus = STATUS_OFF;
+	
 	while (1)
 	{
 		EventBits_Receive = xEventGroupWaitBits(Event_Handle,  
@@ -347,71 +351,93 @@ static void Task_Lamp(void* parameter)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* 
+ * Function:	Task_Shutter
+ * Description: This function is for turn on or turn off the shutter
+ *				
+ * Parameters:	None
+ * Return:		None
+ */
 static void Task_Shutter(void* parameter)
 {
-	BaseType_t ShutterStatus = MOTOR_INIT_POSITION;
 	EventBits_t EventBits_Receive;
-	const TickType_t xTicksToWait = (100) / portTICK_PERIOD_MS;
+	const TickType_t xTicksToWait = (MANUAL_SCAN_TIME-100) / portTICK_PERIOD_MS;
 	
-	//const TickType_t xTicksToWait = portMAX_DELAY;
+	BaseType_t Status_Shutter = MOTOR_INIT_POSITION;	
 	
 	while(1)
 	{
 		EventBits_Receive = xEventGroupWaitBits(Event_Handle,  
-												KEY_SHT_UP,
+												KEY_SHT_UP|KEY_SHT_DW,
 												pdTRUE,   
-												pdTRUE,
-												xTicksToWait);	//after Maximum Waiting Time, 
+												pdFALSE,
+												xTicksToWait);	
 		
-		if((EventBits_Receive & KEY_SHT_UP)==KEY_SHT_UP)
+		if(((EventBits_Receive & KEY_SHT_UP) != 0) || ((EventBits_Receive & KEY_SHT_DW) != 0 ))
 		{
-
+			if(((EventBits_Receive & KEY_SHT_UP)==KEY_SHT_UP) && (Status_Shutter == MOTOR_INIT_POSITION))
+			{
+				printf("Shutter is going to open\r\n");
 				ULN2003_ToTerminal();
-			
-			//ULN2003_Delay_ms(8000);
-			Lamp_ON();
-			//vTaskDelay(4000);
-				printf("ccccccccccccccccccccccccccccccccccccccccc\r\n");
-			
+				Status_Shutter = MOTOT_END_POSITION;
+				printf("Shutter is opened\r\n");
+			}
+			if(((EventBits_Receive & KEY_SHT_DW)==KEY_SHT_DW) && (Status_Shutter == MOTOT_END_POSITION))
+			{
+				printf("Shutter is going to close\r\n");
+				ULN2003_ToInitial();
+				Status_Shutter = MOTOR_INIT_POSITION;
+				printf("Shutter is closed\r\n");
+			}
 		}
-		else
-		{
-			printf("crrrrrrrrrrrrrrrrrrrrrrrrrrrrrrc\r\n");
-			Lamp_OFF();
-		}
-
-		
-		
-		
 	
 	}
 }
-
-
 
 
 
 static void Task_AirConditioner	(void* parameter)
 {
+	EventBits_t EventBits_Receive;
+	const TickType_t xTicksToWait = (MANUAL_SCAN_TIME-100) / portTICK_PERIOD_MS;
+	
+	BaseType_t Status_AirConditioner = AC_CLOSE;
+	
 	while(1)
 	{
-	
+		EventBits_Receive = xEventGroupWaitBits(Event_Handle,  
+												KEY_CLR_ON|KEY_HTR_ON,
+												pdTRUE,   
+												pdFALSE,
+												xTicksToWait);		
+		if(((EventBits_Receive & KEY_CLR_ON) != 0) || ((EventBits_Receive & KEY_HTR_ON) != 0 ))
+		{
+			if(((EventBits_Receive & KEY_CLR_ON)==KEY_CLR_ON) && (Status_AirConditioner == AC_CLOSE))
+			{
+				Status_AirConditioner = AC_COOLER;
+				Cooler_ON();
+				printf("Cooler is on!\r\n");
+			}
+			if(((EventBits_Receive & KEY_HTR_ON)==KEY_HTR_ON) && (Status_AirConditioner == AC_CLOSE))
+			{
+				Status_AirConditioner = AC_HEATER;
+				Heater_ON();
+				printf("Heater is on!\r\n");
+			}			
+		}
+		else
+		{
+			if(Status_AirConditioner != AC_CLOSE)
+			{
+				Heater_OFF();
+				Cooler_OFF();
+				Status_AirConditioner = AC_CLOSE;
+				printf("Air conditioner is off\r\n");
+			}
+		}
 	}
 }
+
 static void Task_CO2Generator	(void* parameter)
 {
 	while(1)
@@ -419,6 +445,7 @@ static void Task_CO2Generator	(void* parameter)
 	
 	}
 }
+
 static void Task_Ventilator		(void* parameter)
 {
 	while(1)
@@ -426,6 +453,7 @@ static void Task_Ventilator		(void* parameter)
 	
 	}
 }
+
 static void Task_WaterSprayer	(void* parameter)
 {
 	while(1)
@@ -433,15 +461,6 @@ static void Task_WaterSprayer	(void* parameter)
 	
 	}
 }
-
-
-
-
-
-
-
-
-
 
 static void Task_Alarm(void* parameter)
 {	
