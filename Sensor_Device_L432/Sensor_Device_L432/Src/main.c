@@ -3,67 +3,121 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stdio.h"
+
+#include "timer.h"
 #include "bsp_led.h"
 #include "bsp_uart.h"
-#include "I2C_gpio.h"
-#include "I2C_sensors.h"
-#include "Sensor_CCS811.h"
+#include "i2c_gpio.h"
+#include "sensor_CCS811.h"
+#include "sensor_bh1750.h"
+#include "sensor_hdc1080.h"
+#include "sensor_soilmoisture.h"
 
 void SystemClock_Config(void);
 
-
-
+uint8_t Main_Task_ID = MAIN_TASK__NONE;
 
 int main(void)
 {
-	extern uint8_t BH1750_Data[2];
-	extern float BH1750_Illumination;
-	
-	extern uint8_t HDC1080_Data[4];
-	extern float HDC1080_Temperature;
-	extern float HDC1080_Humidity;	
-	
-	extern CCS811_Measurement CCS811;
-	
 	HAL_Init();
 	SystemClock_Config();
+	SystemMainTimer_Config();
 
-	LED_TEST_Config();
+	DEBUG_LED_Config();
 	DEBUG_UART_Config();
 
-	
 	BH1750_Config();
 	HDC1080_Config();
 	CCS811_Config();
+	SoilMoisture_Config();
 	
-	
+	HAL_TIM_Base_Start_IT(&SysMainTimer);
 	
 	while (1)
 	{
-		BH1750_Start();
-		BH1750_WaitingData_ms();
-		BH1750_ReadData(BH1750_Data);
-		BH1750_ConvertResult(BH1750_Data,&BH1750_Illumination);
-		printf("BH1750: %f \r\n",BH1750_Illumination);
-		
-		HDC1080_Start();
-		HDC1080_WaitingData_ms();
-		HDC1080_ReadData(HDC1080_Data);
-		HDC1080_ConvertResult(HDC1080_Data,&HDC1080_Temperature,&HDC1080_Humidity);
-		printf("HDC1080: %f , %f \r\n",HDC1080_Temperature,HDC1080_Humidity);
-		
-		CCS811GetData();
-		printf("eco2=%d  tvoc=%d id=%d\r\n", CCS811.eco2, CCS811.tvoc,CCS811.device_id);
-		CCS811ClearData();
-		
-		
-		printf("\r\n");
-		
-		HAL_Delay(2000);
-
+		switch (Main_Task_ID)
+		{
+			case MAIN_TASK__NONE:
+				main_task__idle();
+				break;
+			case MAIN_TASK__DEAL_WITH_MAIN_TIMER:
+				main_task__deal_with_main_timer();
+				Main_Task_ID = MAIN_TASK__MANAGE_DATA;
+				break;
+			case MAIN_TASK__MANAGE_DATA:
+				main_task__manage_data();
+				Main_Task_ID = MAIN_TASK__NONE;
+				break;
+		}
 	}
-
 }
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	Main_Task_ID = MAIN_TASK__DEAL_WITH_MAIN_TIMER;
+}
+
+
+void main_task__idle(void)
+{
+	;
+}
+
+void main_task__deal_with_main_timer(void)
+{
+	DEBUG_LED_ON();
+	
+	BH1750_Start();
+	HDC1080_Start();
+	CCS811_ClearData();
+	CCS811_GetData();
+	SoilMoisture_GetData();
+	
+	HAL_Delay(150);
+	
+	BH1750_ReadData(BH1750_Data);
+	BH1750_GetResult(BH1750_Data,&BH1750_Illumination);
+	BH1750_ConvertResultToInteger(&BH1750_Illumination,&BH1750_Illumination_TX);
+
+	HDC1080_ReadData(HDC1080_Data);
+	HDC1080_GetResult(HDC1080_Data,&HDC1080_Temperature,&HDC1080_Humidity);
+	HDC1080_ConvertResultToInteger(&HDC1080_Temperature,&HDC1080_Humidity,&HDC1080_Temperature_TX,&HDC1080_Humidity_TX);
+}
+
+void main_task__manage_data(void)
+{
+	printf("BH1750: %d \r\n",BH1750_Illumination_TX);
+	printf("HDC1080: %d , %d \r\n",HDC1080_Temperature_TX,HDC1080_Humidity_TX);
+	printf("CCS811: CO2=%d \r\n", CCS811.eco2);
+	printf("Soil %d \r\n", ADC_Percent);
+	
+	uint8_t DataPackage[12] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,'\r','\n'};
+	
+	DataPackage[0] = (uint8_t)(BH1750_Illumination_TX >>8);
+	DataPackage[1] = (uint8_t)(BH1750_Illumination_TX & 0xff);
+	DataPackage[2] = (uint8_t)(HDC1080_Temperature_TX >>8);
+	DataPackage[3] = (uint8_t)(HDC1080_Temperature_TX & 0xff);
+	DataPackage[4] = (uint8_t)(HDC1080_Humidity_TX >>8);
+	DataPackage[5] = (uint8_t)(HDC1080_Humidity_TX & 0xff);
+	DataPackage[6] = (uint8_t)(CCS811.eco2 >>8);
+	DataPackage[7] = (uint8_t)(CCS811.eco2 & 0xff);
+	DataPackage[8] = (uint8_t)(ADC_Percent >>8);
+	DataPackage[9] = (uint8_t)(ADC_Percent & 0xff);	
+	
+	sendByte_via(&DebugUART,DataPackage+0);
+	sendByte_via(&DebugUART,DataPackage+1);
+	sendByte_via(&DebugUART,DataPackage+2);
+	sendByte_via(&DebugUART,DataPackage+3);
+	sendByte_via(&DebugUART,DataPackage+4);
+	sendByte_via(&DebugUART,DataPackage+5);
+	sendByte_via(&DebugUART,DataPackage+6);
+	sendByte_via(&DebugUART,DataPackage+7);
+	sendByte_via(&DebugUART,DataPackage+8);
+	sendByte_via(&DebugUART,DataPackage+9);
+	
+	DEBUG_LED_OFF();
+}
+
 
 
 
@@ -109,8 +163,16 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2|RCC_PERIPHCLK_ADC;
   PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
+  PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLLSAI1;
+  PeriphClkInit.PLLSAI1.PLLSAI1Source = RCC_PLLSOURCE_MSI;
+  PeriphClkInit.PLLSAI1.PLLSAI1M = 1;
+  PeriphClkInit.PLLSAI1.PLLSAI1N = 16;
+  PeriphClkInit.PLLSAI1.PLLSAI1P = RCC_PLLP_DIV7;
+  PeriphClkInit.PLLSAI1.PLLSAI1Q = RCC_PLLQ_DIV2;
+  PeriphClkInit.PLLSAI1.PLLSAI1R = RCC_PLLR_DIV2;
+  PeriphClkInit.PLLSAI1.PLLSAI1ClockOut = RCC_PLLSAI1_ADC1CLK;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
@@ -126,10 +188,9 @@ void SystemClock_Config(void)
   HAL_RCCEx_EnableMSIPLLMode();
 }
 
+
 void Error_Handler(void)
 {
-	
+
 }
-
-
 

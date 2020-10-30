@@ -590,13 +590,13 @@ ARM Macro Assembler    Page 10
 
 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=sensor_device_l432\startup_stm32l432xx.d -osensor_device_l432\s
-tartup_stm32l432xx.o -I.\RTE\_Sensor_Device_L432 -IC:\B_ElectronicsCAD\Keil_v5\
-ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include -IC:\B_ElectronicsCAD\Keil_v5\ARM\PACK\K
-eil\STM32L4xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include --predefine="
-__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 524" --predefine="_RTE_ 
-SETA 1" --predefine="STM32L432xx SETA 1" --list=startup_stm32l432xx.lst startup
-_stm32l432xx.s
+erwork --depend=l432_sensordevice_20201028\startup_stm32l432xx.d -ol432_sensord
+evice_20201028\startup_stm32l432xx.o -I.\RTE\_L432_SensorDevice_20201028 -IC:\B
+_ElectronicsCAD\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include -IC:\B_Electroni
+csCAD\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32L4
+xx\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 
+524" --predefine="_RTE_ SETA 1" --predefine="STM32L432xx SETA 1" --list=startup
+_stm32l432xx.lst startup_stm32l432xx.s
 
 
 

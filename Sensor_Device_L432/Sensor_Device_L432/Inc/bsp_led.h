@@ -3,12 +3,13 @@
 
 #include "main.h"
 
-#define LED_TEST_CLK_ENABLE()		__HAL_RCC_GPIOB_CLK_ENABLE()
-#define LED_TEST_GPIO_PORT			GPIOB
-#define LED_TEST_GPIO_PIN			GPIO_PIN_3
+#define DEBUG_LED_CLK_ENABLE()		__HAL_RCC_GPIOB_CLK_ENABLE()
+#define DEBUG_LED_GPIO_PORT			GPIOB
+#define DEBUG_LED_GPIO_PIN			GPIO_PIN_3
 
-void LED_TEST_Config(void);
-void LED_TEST_ON(void);
-void LED_TEST_OFF(void);
+void DEBUG_LED_Config(void);
+void DEBUG_LED_ON(void);
+void DEBUG_LED_OFF(void);
+void DEBUG_LED_TOGGLE(void);
 
 #endif

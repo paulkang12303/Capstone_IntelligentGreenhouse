@@ -1,4 +1,4 @@
-#include "I2C_gpio.h"
+#include "i2c_gpio.h"
 
 void us_delay(uint32_t uSec)
 {

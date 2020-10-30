@@ -13,9 +13,9 @@
 #define		DebugUART_TX_PIN				GPIO_PIN_2
 #define		DebugUART_RX_PIN				GPIO_PIN_15
 
-
 extern UART_HandleTypeDef DebugUART;
 
 void DEBUG_UART_Config(void);
-
+void sendByte_via(UART_HandleTypeDef *huart,uint8_t *data_TX);
+void sendString_via(UART_HandleTypeDef *huart,uint8_t *data_TX);
 #endif

@@ -45,6 +45,20 @@ void DEBUG_UART_Config(void)
 int fputc(int ch, FILE *f)
 {
 	HAL_UART_Transmit(&DebugUART, (uint8_t *)&ch, 1, 0xFFFF);
- 
 	return ch;
 }
+
+void sendByte_via(UART_HandleTypeDef *huart,uint8_t *data_TX)
+{
+	HAL_UART_Transmit(huart, data_TX, 1, 0xFFFF);
+}
+
+void sendString_via(UART_HandleTypeDef *huart,uint8_t *data_TX)
+{
+	while(*data_TX)
+	{
+		HAL_UART_Transmit(huart,(uint8_t *)data_TX++,1,0xFFFF);
+	}
+}
+
+

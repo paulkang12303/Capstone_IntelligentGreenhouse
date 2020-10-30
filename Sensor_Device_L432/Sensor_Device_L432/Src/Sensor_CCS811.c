@@ -1,8 +1,7 @@
 #include "Sensor_CCS811.h"
-#include "I2C_gpio.h"
-#include <stdio.h>
 
 uint8_t BUF[12];
+uint8_t	CCS811_Data[8] = {0};
 uint8_t Information[10];
 uint8_t MeasureMode, Status, Error_ID;
 uint8_t FlagGetId = 1;
@@ -113,8 +112,7 @@ void CCS811_Config(void)
 	
 }
 
-
-void CCS811GetData(void)
+void CCS811_GetData(void)
 {
 	CCS811_CS_ON(); 	// nWAKE pin is asserted at least 50¦Ìs before the transaction and kept asserted throughout,nWAKE pin is active low
 	HAL_Delay(10);
@@ -135,7 +133,7 @@ void CCS811GetData(void)
 	Information[0] = 0;
 }
 
-void CCS811ClearData(void)
+void CCS811_ClearData(void)
 {
 	CCS811.device_id = 0;
 	CCS811.eco2      = 0;

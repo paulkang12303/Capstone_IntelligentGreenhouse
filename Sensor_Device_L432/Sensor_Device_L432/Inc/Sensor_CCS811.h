@@ -3,6 +3,9 @@
 
 # include "stm32l4xx_hal.h"
 
+#include "bsp_uart.h"
+#include "i2c_gpio.h"
+
 #define CCS811_Add      		0x5A<<1
 
 #define STATUS_REG 0x00
@@ -41,8 +44,11 @@ uint8_t error_id;
 uint16_t raw_data;
 } CCS811_Measurement;
 
+extern CCS811_Measurement 	CCS811;
+extern uint8_t				CCS811_Data[8];
+
 void CCS811_Config(void);
 void CCS811_CS_GPIO_Config(void);
-void CCS811GetData(void);
-void CCS811ClearData(void);
+void CCS811_GetData(void);
+void CCS811_ClearData(void);
 #endif
