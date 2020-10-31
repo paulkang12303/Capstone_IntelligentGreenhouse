@@ -1,19 +1,24 @@
 
 
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stdio.h"
 
 #include "timer.h"
+#include "exti.h"
 #include "bsp_led.h"
 #include "bsp_uart.h"
-#include "i2c_gpio.h"
 #include "sensor_CCS811.h"
 #include "sensor_bh1750.h"
 #include "sensor_hdc1080.h"
 #include "sensor_soilmoisture.h"
 
+#define	TIME_TRIGGER_ENABLE 0	//1 means measurement is drived by timer, 0 means by EXTI
+
 void SystemClock_Config(void);
+void RUN_TRIGGER_Config(void);
+void PeripheralSensor_Config(void);
 
 uint8_t Main_Task_ID = MAIN_TASK__NONE;
 
@@ -21,17 +26,13 @@ int main(void)
 {
 	HAL_Init();
 	SystemClock_Config();
-	SystemMainTimer_Config();
-
+	
 	DEBUG_LED_Config();
 	DEBUG_UART_Config();
-
-	BH1750_Config();
-	HDC1080_Config();
-	CCS811_Config();
-	SoilMoisture_Config();
 	
-	HAL_TIM_Base_Start_IT(&SysMainTimer);
+	PeripheralSensor_Config();
+
+	RUN_TRIGGER_Config();
 	
 	while (1)
 	{
@@ -40,8 +41,8 @@ int main(void)
 			case MAIN_TASK__NONE:
 				main_task__idle();
 				break;
-			case MAIN_TASK__DEAL_WITH_MAIN_TIMER:
-				main_task__deal_with_main_timer();
+			case MAIN_TASK__DEAL_WITH_TRIGGER:
+				main_task__deal_with_trigger();
 				Main_Task_ID = MAIN_TASK__MANAGE_DATA;
 				break;
 			case MAIN_TASK__MANAGE_DATA:
@@ -52,18 +53,51 @@ int main(void)
 	}
 }
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+
+
+void PeripheralSensor_Config(void)
 {
-	Main_Task_ID = MAIN_TASK__DEAL_WITH_MAIN_TIMER;
+	BH1750_Config();
+	HDC1080_Config();
+	CCS811_Config();
+	SoilMoisture_Config();
 }
 
+void RUN_TRIGGER_Config(void)
+{
+	if (TIME_TRIGGER_ENABLE == 1)
+	{
+		SystemMainTimer_Config();
+		HAL_TIM_Base_Start_IT(&SysMainTimer);
+	}
+	else
+	{
+		EXTI_PA11_Config();
+	}
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	Main_Task_ID = MAIN_TASK__DEAL_WITH_TRIGGER;
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == RUN_TRIGGER_PIN)
+	{
+		if(HAL_GPIO_ReadPin(RUN_TRIGGER_PORT,RUN_TRIGGER_PIN) == 1)
+		{
+			Main_Task_ID = MAIN_TASK__DEAL_WITH_TRIGGER;
+		}
+	}
+}
 
 void main_task__idle(void)
 {
 	;
 }
 
-void main_task__deal_with_main_timer(void)
+void main_task__deal_with_trigger(void)
 {
 	DEBUG_LED_ON();
 	
@@ -91,7 +125,7 @@ void main_task__manage_data(void)
 	printf("CCS811: CO2=%d \r\n", CCS811.eco2);
 	printf("Soil %d \r\n", ADC_Percent);
 	
-	uint8_t DataPackage[12] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,'\r','\n'};
+	uint8_t DataPackage[12] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,'\n','\0'};
 	
 	DataPackage[0] = (uint8_t)(BH1750_Illumination_TX >>8);
 	DataPackage[1] = (uint8_t)(BH1750_Illumination_TX & 0xff);
