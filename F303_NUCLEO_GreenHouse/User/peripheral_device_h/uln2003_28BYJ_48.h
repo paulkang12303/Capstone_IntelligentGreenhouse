@@ -2,7 +2,7 @@
 #define	_ULN2003_28BYJ_48_H
 
 #include "stm32f30x.h"
-#include "bsp_delay.h"
+#include "system_delay.h"
 
 #define ORANGE_PORT			GPIOB
 #define ORANGE_PIN			GPIO_Pin_11
@@ -27,7 +27,7 @@
 #define Blue_H()   	GPIO_SetBits(BLUE_PORT, BLUE_PIN);
 #define Blue_L()   	GPIO_ResetBits(BLUE_PORT, BLUE_PIN);
 
-#define ULN2003_Delay_ms(n)		delay_ms(n)
+#define ULN2003_Delay_ms(n)		SystemDelay_ms(n)
 
 void ULN2003_Config(void);
 void ULN2003_OFF(void);

@@ -12,6 +12,7 @@
 "l432_sensordevice_20201028\sensor_hdc1080.o"
 "l432_sensordevice_20201028\timer.o"
 "l432_sensordevice_20201028\sensor_soilmoisture.o"
+"l432_sensordevice_20201028\exti.o"
 "l432_sensordevice_20201028\stm32l4xx_hal_adc.o"
 "l432_sensordevice_20201028\stm32l4xx_hal_adc_ex.o"
 "l432_sensordevice_20201028\stm32l4xx_hal.o"

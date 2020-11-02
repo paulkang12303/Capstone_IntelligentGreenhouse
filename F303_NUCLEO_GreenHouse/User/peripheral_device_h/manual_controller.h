@@ -3,12 +3,14 @@
 
 #include "stm32f30x.h"
 
+#define		MANUAL_SCAN_TIME			200
 #define		STATUS_OFF					0
 #define		STATUS_ON					1
 #define		MOTOR_INIT_POSITION			0
 #define		MOTOT_END_POSITION			1
-#define		MANUAL_SCAN_TIME			200
-
+#define		AC_CLOSE					0
+#define		AC_HEATER					1
+#define		AC_COOLER					2
 
 #define 	KEY_MAN_EN_PORT 			GPIOB
 #define		KEY_MAN_EN_PIN				GPIO_Pin_0

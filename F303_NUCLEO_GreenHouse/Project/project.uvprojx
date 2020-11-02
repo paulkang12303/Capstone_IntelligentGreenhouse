@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F303xe,</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Library\CMSIS\Device\ST\STM32F30x\Include;..\Library\CMSIS\Include;..\Library\STM32F30x_StdPeriph_Driver\inc;..\User;..\User\led;..\User\usart;..\FreeRTOS\include;..\FreeRTOS\port\RVDS\ARM_CM4F;..\User\key;..\User\peripheral_device_h</IncludePath>
+              <IncludePath>..\Library\CMSIS\Device\ST\STM32F30x\Include;..\Library\CMSIS\Include;..\Library\STM32F30x_StdPeriph_Driver\inc;..\User;..\FreeRTOS\include;..\FreeRTOS\port\RVDS\ARM_CM4F;..\User\peripheral_device_h;..\User\delay;..\User\bsp_key;..\User\bsp_led;..\User\bsp_usart</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -526,6 +526,11 @@
           <GroupName>USER</GroupName>
           <Files>
             <File>
+              <FileName>FreeRTOSConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\User\FreeRTOSConfig.h</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\main.c</FilePath>
@@ -536,24 +541,9 @@
               <FilePath>..\User\stm32f30x_it.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_led.c</FileName>
+              <FileName>peripheral_device.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\led\bsp_led.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\usart\bsp_usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>FreeRTOSConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\User\FreeRTOSConfig.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\key\bsp_key.c</FilePath>
+              <FilePath>..\User\peripheral_device_c\peripheral_device.c</FilePath>
             </File>
             <File>
               <FileName>manual_controller.c</FileName>
@@ -561,9 +551,9 @@
               <FilePath>..\User\peripheral_device_c\manual_controller.c</FilePath>
             </File>
             <File>
-              <FileName>environment_device.c</FileName>
+              <FileName>lamp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\peripheral_device_c\environment_device.c</FilePath>
+              <FilePath>..\User\peripheral_device_c\lamp.c</FilePath>
             </File>
             <File>
               <FileName>uln2003_28BYJ_48.c</FileName>
@@ -571,9 +561,44 @@
               <FilePath>..\User\peripheral_device_c\uln2003_28BYJ_48.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_delay.c</FileName>
+              <FileName>airconditioner.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\peripheral_device_c\bsp_delay.c</FilePath>
+              <FilePath>..\User\peripheral_device_c\airconditioner.c</FilePath>
+            </File>
+            <File>
+              <FileName>alarm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\alarm.c</FilePath>
+            </File>
+            <File>
+              <FileName>co2_generator.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\co2_generator.c</FilePath>
+            </File>
+            <File>
+              <FileName>ventilator.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\ventilator.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp_key\bsp_key.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp_led\bsp_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp_usart\bsp_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>water_sprayer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\water_sprayer.c</FilePath>
             </File>
           </Files>
         </Group>

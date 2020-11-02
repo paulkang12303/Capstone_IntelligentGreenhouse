@@ -1,5 +1,5 @@
-.\objects\bsp_key.o: ..\User\key\bsp_key.c
-.\objects\bsp_key.o: ..\User\key\bsp_key.h
+.\objects\bsp_key.o: ..\User\bsp_key\bsp_key.c
+.\objects\bsp_key.o: ..\User\bsp_key\bsp_key.h
 .\objects\bsp_key.o: ..\Library\CMSIS\Device\ST\STM32F30x\Include\stm32f30x.h
 .\objects\bsp_key.o: ..\Library\CMSIS\Include\core_cm4.h
 .\objects\bsp_key.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h

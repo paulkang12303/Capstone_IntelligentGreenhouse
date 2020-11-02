@@ -1,64 +1,19 @@
-/**
-  ******************************************************************************
-  * @file    stm32f30x_it.c 
-  * @author  MCD Application Team
-  * @version V1.2.2
-  * @date    14-August-2015
-  * @brief   Main Interrupt Service Routines.
-  *          This file provides template for all exceptions handler and 
-  *          peripherals interrupt service routine.
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT 2015 STMicroelectronics</center></h2>
-  *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  *
-  ******************************************************************************
-  */
 
-/* Includes ------------------------------------------------------------------*/
 #include "stm32f30x_it.h"
 #include "bsp_usart.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "queue.h"
 
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
+extern xQueueHandle Queue_Handle_RxData;
 
-/******************************************************************************/
-/*            Cortex-M4 Processor Exceptions Handlers                         */
-/******************************************************************************/
 
-/**
-  * @brief  This function handles NMI exception.
-  * @param  None
-  * @retval None
-  */
 void NMI_Handler(void)
 {
 }
 
-/**
-  * @brief  This function handles Hard Fault exception.
-  * @param  None
-  * @retval None
-  */
+
 void HardFault_Handler(void)
 {
   /* Go to infinite loop when Hard Fault exception occurs */
@@ -67,11 +22,7 @@ void HardFault_Handler(void)
   }
 }
 
-/**
-  * @brief  This function handles Memory Manage exception.
-  * @param  None
-  * @retval None
-  */
+
 void MemManage_Handler(void)
 {
   /* Go to infinite loop when Memory Manage exception occurs */
@@ -80,11 +31,6 @@ void MemManage_Handler(void)
   }
 }
 
-/**
-  * @brief  This function handles Bus Fault exception.
-  * @param  None
-  * @retval None
-  */
 void BusFault_Handler(void)
 {
   /* Go to infinite loop when Bus Fault exception occurs */
@@ -93,11 +39,7 @@ void BusFault_Handler(void)
   }
 }
 
-/**
-  * @brief  This function handles Usage Fault exception.
-  * @param  None
-  * @retval None
-  */
+
 void UsageFault_Handler(void)
 {
   /* Go to infinite loop when Usage Fault exception occurs */
@@ -106,11 +48,7 @@ void UsageFault_Handler(void)
   }
 }
 
-/**
-  * @brief  This function handles SVCall exception.
-  * @param  None
-  * @retval None
-  */
+
 //void SVC_Handler(void)
 //{
 //}
@@ -140,14 +78,16 @@ void SysTick_Handler(void)
 }
 
 
-
 void USART2_IRQHandler(void)
 {
-  uint8_t ucTemp;
-	if(USART_GetITStatus(USART2,USART_IT_RXNE)!=RESET)
-	{		
-		ucTemp = USART_ReceiveData( USART2 );
-		USART_SendData(USART2,ucTemp);    
-	}	 
+	portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+	uint8_t Rx_Byte;
+
+	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+	{	
+		Rx_Byte = USART_ReceiveData(USART2);
+		xQueueSendToBackFromISR(Queue_Handle_RxData, &Rx_Byte, &xHigherPriorityTaskWoken);
+		portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
+	} 
 }
 

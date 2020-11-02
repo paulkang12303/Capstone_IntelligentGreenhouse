@@ -33,4 +33,16 @@
 .\objects\uln2003_28byj_48.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_usart.h
 .\objects\uln2003_28byj_48.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_wwdg.h
 .\objects\uln2003_28byj_48.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_misc.h
-.\objects\uln2003_28byj_48.o: ..\User\peripheral_device_h\bsp_delay.h
+.\objects\uln2003_28byj_48.o: ..\User\delay\system_delay.h
+.\objects\uln2003_28byj_48.o: ..\FreeRTOS\include\FreeRTOS.h
+.\objects\uln2003_28byj_48.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\uln2003_28byj_48.o: ..\User\FreeRTOSConfig.h
+.\objects\uln2003_28byj_48.o: ..\User\bsp_usart\bsp_usart.h
+.\objects\uln2003_28byj_48.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\uln2003_28byj_48.o: ..\FreeRTOS\include\projdefs.h
+.\objects\uln2003_28byj_48.o: ..\FreeRTOS\include\portable.h
+.\objects\uln2003_28byj_48.o: ..\FreeRTOS\include\deprecated_definitions.h
+.\objects\uln2003_28byj_48.o: ..\FreeRTOS\port\RVDS\ARM_CM4F\portmacro.h
+.\objects\uln2003_28byj_48.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\uln2003_28byj_48.o: ..\FreeRTOS\include\task.h
+.\objects\uln2003_28byj_48.o: ..\FreeRTOS\include\list.h

@@ -36,7 +36,7 @@
 .\objects\heap_4.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_usart.h
 .\objects\heap_4.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_wwdg.h
 .\objects\heap_4.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_misc.h
-.\objects\heap_4.o: ..\User\usart\bsp_usart.h
+.\objects\heap_4.o: ..\User\bsp_usart\bsp_usart.h
 .\objects\heap_4.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\heap_4.o: ..\FreeRTOS\include\projdefs.h
 .\objects\heap_4.o: ..\FreeRTOS\include\portable.h

@@ -81,6 +81,7 @@ void ULN2003_Forword360(uint16_t period)
 	{
 		ULN2003_ForwardRun(period);
 	}
+	ULN2003_OFF();
 }
 
 void ULN2003_Backword360(uint16_t period)
@@ -89,18 +90,19 @@ void ULN2003_Backword360(uint16_t period)
 	{
 		ULN2003_BackwardRun(period);
 	}
+	ULN2003_OFF();
 }
 
 
 uint8_t ULN2003_ToTerminal(void)
 {
-	ULN2003_Forword360(1);
+	ULN2003_Forword360(2);
 	return 1;
 }
 
 uint8_t ULN2003_ToInitial(void)
 {
-	ULN2003_Backword360(1);
+	ULN2003_Backword360(2);
 	return 1;
 }
 

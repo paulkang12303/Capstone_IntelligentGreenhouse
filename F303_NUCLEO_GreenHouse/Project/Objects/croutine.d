@@ -35,7 +35,7 @@
 .\objects\croutine.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_usart.h
 .\objects\croutine.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_wwdg.h
 .\objects\croutine.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_misc.h
-.\objects\croutine.o: ..\User\usart\bsp_usart.h
+.\objects\croutine.o: ..\User\bsp_usart\bsp_usart.h
 .\objects\croutine.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\croutine.o: ..\FreeRTOS\include\projdefs.h
 .\objects\croutine.o: ..\FreeRTOS\include\portable.h

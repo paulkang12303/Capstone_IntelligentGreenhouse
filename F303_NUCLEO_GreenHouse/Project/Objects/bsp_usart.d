@@ -1,5 +1,5 @@
-.\objects\bsp_usart.o: ..\User\usart\bsp_usart.c
-.\objects\bsp_usart.o: ..\User\usart\bsp_usart.h
+.\objects\bsp_usart.o: ..\User\bsp_usart\bsp_usart.c
+.\objects\bsp_usart.o: ..\User\bsp_usart\bsp_usart.h
 .\objects\bsp_usart.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\bsp_usart.o: ..\Library\CMSIS\Device\ST\STM32F30x\Include\stm32f30x.h
 .\objects\bsp_usart.o: ..\Library\CMSIS\Include\core_cm4.h

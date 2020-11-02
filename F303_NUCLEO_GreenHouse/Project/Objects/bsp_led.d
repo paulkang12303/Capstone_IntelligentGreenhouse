@@ -1,5 +1,5 @@
-.\objects\bsp_led.o: ..\User\led\bsp_led.c
-.\objects\bsp_led.o: ..\User\led\bsp_led.h
+.\objects\bsp_led.o: ..\User\bsp_led\bsp_led.c
+.\objects\bsp_led.o: ..\User\bsp_led\bsp_led.h
 .\objects\bsp_led.o: ..\Library\CMSIS\Device\ST\STM32F30x\Include\stm32f30x.h
 .\objects\bsp_led.o: ..\Library\CMSIS\Include\core_cm4.h
 .\objects\bsp_led.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h

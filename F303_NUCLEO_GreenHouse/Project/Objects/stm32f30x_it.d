@@ -1,6 +1,6 @@
 .\objects\stm32f30x_it.o: ..\User\stm32f30x_it.c
 .\objects\stm32f30x_it.o: ..\User\stm32f30x_it.h
-.\objects\stm32f30x_it.o: ..\User\usart\bsp_usart.h
+.\objects\stm32f30x_it.o: ..\User\bsp_usart\bsp_usart.h
 .\objects\stm32f30x_it.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\stm32f30x_it.o: ..\Library\CMSIS\Device\ST\STM32F30x\Include\stm32f30x.h
 .\objects\stm32f30x_it.o: ..\Library\CMSIS\Include\core_cm4.h
@@ -45,3 +45,4 @@
 .\objects\stm32f30x_it.o: ..\FreeRTOS\include\mpu_wrappers.h
 .\objects\stm32f30x_it.o: ..\FreeRTOS\include\task.h
 .\objects\stm32f30x_it.o: ..\FreeRTOS\include\list.h
+.\objects\stm32f30x_it.o: ..\FreeRTOS\include\queue.h
