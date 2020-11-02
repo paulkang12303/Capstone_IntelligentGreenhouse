@@ -1,7 +1,10 @@
 
 
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+
+#define	TIME_TRIGGER_ENABLE 0	//1 means measurement is drived by timer, 0 means by EXTI
 
 #define	TIME_TRIGGER_ENABLE 0	//1 means measurement is drived by timer, 0 means by EXTI
 
@@ -15,14 +18,14 @@ int main(void)
 {
 	HAL_Init();
 	SystemClock_Config();
-	
+
 	DEBUG_LED_Config();
 	DEBUG_UART_Config();
-	
+
 	PeripheralSensor_Config();
 
 	RUN_TRIGGER_Config();
-	
+
 	while (1)
 	{
 		switch (Main_Task_ID)
@@ -89,15 +92,15 @@ void main_task__idle(void)
 void main_task__deal_with_trigger(void)
 {
 	DEBUG_LED_ON();
-	
+
 	BH1750_Start();
 	HDC1080_Start();
 	CCS811_ClearData();
 	CCS811_GetData();
 	SoilMoisture_GetData();
-	
+
 	HAL_Delay(150);
-	
+
 	BH1750_ReadData(BH1750_Data);
 	BH1750_GetResult(BH1750_Data,&BH1750_Illumination);
 	BH1750_ConvertResultToInteger(&BH1750_Illumination,&BH1750_Illumination_TX);
@@ -113,9 +116,9 @@ void main_task__manage_data(void)
 //	printf("HDC1080: %d , %d \r\n",HDC1080_Temperature_TX,HDC1080_Humidity_TX);
 //	printf("CCS811: CO2=%d \r\n", CCS811.eco2);
 //	printf("Soil %d \r\n", ADC_Percent);
-	
-	uint8_t DataPackage[12] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,'\r','\n'};
-	
+
+	uint8_t DataPackage[12] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,'\n','\0'};
+
 	DataPackage[0] = (uint8_t)(BH1750_Illumination_TX >>8);
 	DataPackage[1] = (uint8_t)(BH1750_Illumination_TX & 0xff);
 	DataPackage[2] = (uint8_t)(HDC1080_Temperature_TX >>8);
@@ -125,8 +128,8 @@ void main_task__manage_data(void)
 	DataPackage[6] = (uint8_t)(CCS811.eco2 >>8);
 	DataPackage[7] = (uint8_t)(CCS811.eco2 & 0xff);
 	DataPackage[8] = (uint8_t)(ADC_Percent >>8);
-	DataPackage[9] = (uint8_t)(ADC_Percent & 0xff);	
-	
+	DataPackage[9] = (uint8_t)(ADC_Percent & 0xff);
+
 	sendByte_via(&DebugUART,DataPackage+0);
 	sendByte_via(&DebugUART,DataPackage+1);
 	sendByte_via(&DebugUART,DataPackage+2);
@@ -138,8 +141,8 @@ void main_task__manage_data(void)
 	sendByte_via(&DebugUART,DataPackage+8);
 	sendByte_via(&DebugUART,DataPackage+9);
 	sendByte_via(&DebugUART,DataPackage+10);
-	sendByte_via(&DebugUART,DataPackage+11);	
-	
+	sendByte_via(&DebugUART,DataPackage+11);
+
 	DEBUG_LED_OFF();
 }
 
@@ -153,11 +156,11 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
-  /** Configure LSE Drive Capability 
+  /** Configure LSE Drive Capability
   */
   HAL_PWR_EnableBkUpAccess();
   __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
-  /** Initializes the CPU, AHB and APB busses clocks 
+  /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE|RCC_OSCILLATORTYPE_MSI;
   RCC_OscInitStruct.LSEState = RCC_LSE_ON;
@@ -175,7 +178,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /** Initializes the CPU, AHB and APB busses clocks 
+  /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
@@ -202,13 +205,13 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /** Configure the main internal regulator output voltage 
+  /** Configure the main internal regulator output voltage
   */
   if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
   {
     Error_Handler();
   }
-  /** Enable MSI Auto calibration 
+  /** Enable MSI Auto calibration
   */
   HAL_RCCEx_EnableMSIPLLMode();
 }
@@ -218,4 +221,3 @@ void Error_Handler(void)
 {
 
 }
-
