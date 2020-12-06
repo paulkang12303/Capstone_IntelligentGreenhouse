@@ -6,7 +6,7 @@ class MainFrame(wx.Frame):
 	def __init__(self):
 		wx.Frame.__init__(self, parent=None, id=1)
 		self.SetTitle("GreenHouse")
-		self.SetSize((320,360))
+		self.SetSize((320,460))
 		self.Center()
 		
 		self.color_red = wx.Colour(255, 0, 0)
@@ -44,7 +44,6 @@ class MainFrame(wx.Frame):
 		
 		heading_2 = wx.StaticText(self,-1,"Device Status: ", (20,160))
 		heading_2.SetFont(font_heading)
-		
 		wx.StaticLine(self, pos=(20, 180), size=(280,1))
 		
 		self.lam = wx.Panel(self, pos=(30, 192), size=(10, 10))
@@ -82,6 +81,24 @@ class MainFrame(wx.Frame):
 		self.btn_start = wx.Button(self, -1, "START", (200, 280), (70, 20))
 		self.Bind(wx.EVT_BUTTON, self.onButtonClick, self.btn_start)
 	
+		heading_3 = wx.StaticText(self,-1,"Configuration: ", (20,300))
+		heading_3.SetFont(font_heading)
+		wx.StaticLine(self, pos=(20, 320), size=(280,1))
+	
+		wx.StaticText(self,-1,"Parameter: ", (20,330))
+		cb1_str = ['Temperature','Illumination','CO2','Moisture']
+		self.cb1 = wx.ComboBox(self, pos = (20, 350), choices = cb1_str, style = wx.CB_READONLY)
+		self.Bind(wx.EVT_COMBOBOX, self.OnSelect, self.cb1)
+		
+		wx.StaticText(self,-1,"Upper Limit: ", (150,330))
+		self.tc1 = wx.TextCtrl(self,-1," ",pos=(150,350),size=(60,22))
+	
+		wx.StaticText(self,-1,"Lower Limit: ", (220,330))
+		self.tc2 = wx.TextCtrl(self,-1," ",pos=(220,350),size=(60,22))
+	
+		self.btn_config = wx.Button(self, -1, "CONFIGURATE", (150, 385), (135, 20))
+		self.Bind(wx.EVT_BUTTON, self.onButtonClick, self.btn_config)
+	
 		self.timer = wx.Timer(self)
 		self.Bind(wx.EVT_TIMER, self.timerInterval, self.timer)
 		
@@ -89,14 +106,40 @@ class MainFrame(wx.Frame):
 		if event.GetEventObject() == self.btn_start:
 			val = self.btn_start.GetLabelText()
 			if (val == 'START'):
-				self.ser = serial.Serial('com4',115200,timeout=2)
-				self.timer.Start(3000)
+				self.ser = serial.Serial('com5',115200,timeout=2)
+				self.timer.Start(5000)
 				self.btn_start.SetLabelText('STOP')
 			if (val == 'STOP'):
 				self.ser.close()
 				self.timer.Stop()
 				self.btn_start.SetLabelText('START')
-				
+		if event.GetEventObject() == self.btn_config:
+			val_P = self.cb1.GetStringSelection()
+			val_Upper = self.tc1.GetValue()
+			val_Lower = self.tc2.GetValue()
+			info_str = "{}'s upper limit has been set to {}. \n Lower limit has been set to {}".format(val_P,val_Upper,val_Lower)
+			dlgmsg = wx.MessageDialog(self, info_str,'setup info',wx.OK )
+			dlgmsg.Center()
+			dlgmsg.ShowModal()
+			dlgmsg.Destroy()
+			self.ser = serial.Serial('com5',115200,timeout=2)
+			self.ser.write("{};{};{}\r\n".format(val_P,val_Upper,val_Lower))
+			self.ser.close()
+	
+	def OnSelect(self, event):
+		if (self.cb1.GetStringSelection()=='Temperature'):
+			self.tc1.SetValue('30.0')
+			self.tc2.SetValue('18.0')
+		if (self.cb1.GetStringSelection()=='Illumination'):
+			self.tc1.SetValue('20000')
+			self.tc2.SetValue('10')
+		if (self.cb1.GetStringSelection()=='CO2'):
+			self.tc1.SetValue('2000')
+			self.tc2.SetValue('500')
+		if (self.cb1.GetStringSelection()=='Moisture'):
+			self.tc1.SetValue('90.0')
+			self.tc2.SetValue('30.0')
+		
 	def timerInterval(self, event):
 		RX_string = self.ser.readline()
 		I = int(str(RX_string)[10:15])
@@ -145,7 +188,7 @@ class MainFrame(wx.Frame):
 			self.status_S.SetBackgroundColour(self.color_red)
 			self.status_S.Refresh()		
 		
-		status = "111111110000100"
+		status = "100000000111110"
 		TX_string = "http://project.hmddesign.ca/add.php?tem={}&Hum={}&Ill={}&CO2={}&soi={}&Sta={}".format(str(T),str(H),str(I),str(C),str(S),status)
 		requests.put(TX_string)
 
