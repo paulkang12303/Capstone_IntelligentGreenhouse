@@ -142,6 +142,7 @@ class MainFrame(wx.Frame):
 		
 	def timerInterval(self, event):
 		RX_string = self.ser.readline()
+		#print(RX_string)
 		I = int(str(RX_string)[10:15])
 		self.st_I.SetLabel(str(I))
 		T = int(str(RX_string)[25:30])/100.0
@@ -187,8 +188,79 @@ class MainFrame(wx.Frame):
 		else:
 			self.status_S.SetBackgroundColour(self.color_red)
 			self.status_S.Refresh()		
+		s_T = str(RX_string)[68];
+		s_H = str(RX_string)[69];
+		s_I = str(RX_string)[70];
+		s_C = str(RX_string)[71];
+		s_S = str(RX_string)[72];
 		
-		status = "100000000111110"
+		s_lam = str(RX_string)[74];
+		s_sht = str(RX_string)[75];
+		s_htr = str(RX_string)[76];
+		s_clr = str(RX_string)[77];
+		s_co2 = str(RX_string)[78];
+		s_ven = str(RX_string)[79];
+		s_spr = str(RX_string)[80];
+		s_alm = str(RX_string)[81];
+		
+		if (s_lam == "1"):
+			self.lam.SetBackgroundColour(self.color_green)
+			self.lam.Refresh()
+		else:
+			self.lam.SetBackgroundColour(self.color_yellow)
+			self.lam.Refresh()
+		
+		if (s_sht == "1"):
+			self.shu.SetBackgroundColour(self.color_green)
+			self.shu.Refresh()
+		else:
+			self.shu.SetBackgroundColour(self.color_yellow)
+			self.shu.Refresh()
+			
+		if (s_htr == "1"):
+			self.hea.SetBackgroundColour(self.color_green)
+			self.hea.Refresh()
+		else:
+			self.hea.SetBackgroundColour(self.color_yellow)
+			self.hea.Refresh()
+			
+		if (s_clr == "1"):
+			self.coo.SetBackgroundColour(self.color_green)
+			self.coo.Refresh()
+		else:
+			self.coo.SetBackgroundColour(self.color_yellow)
+			self.coo.Refresh()		
+			
+		if (s_co2 == "1"):
+			self.co2.SetBackgroundColour(self.color_green)
+			self.co2.Refresh()
+		else:
+			self.co2.SetBackgroundColour(self.color_yellow)
+			self.co2.Refresh()	
+			
+		if (s_ven == "1"):
+			self.ven.SetBackgroundColour(self.color_green)
+			self.ven.Refresh()
+		else:
+			self.ven.SetBackgroundColour(self.color_yellow)
+			self.ven.Refresh()	
+
+		if (s_spr == "1"):
+			self.wat.SetBackgroundColour(self.color_green)
+			self.wat.Refresh()
+		else:
+			self.wat.SetBackgroundColour(self.color_yellow)
+			self.wat.Refresh()	
+			
+		if (s_alm == "1"):
+			self.ala.SetBackgroundColour(self.color_green)
+			self.ala.Refresh()
+		else:
+			self.ala.SetBackgroundColour(self.color_yellow)
+			self.ala.Refresh()	
+		
+		status = "1" + s_lam + s_sht + s_htr + s_clr + s_co2 + s_ven + s_spr + s_alm + s_T + s_H + s_I + s_C + s_S + "0";
+		#status = "100000000111110"
 		TX_string = "http://project.hmddesign.ca/add.php?tem={}&Hum={}&Ill={}&CO2={}&soi={}&Sta={}".format(str(T),str(H),str(I),str(C),str(S),status)
 		requests.put(TX_string)
 
