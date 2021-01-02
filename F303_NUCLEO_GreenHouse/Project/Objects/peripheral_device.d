@@ -54,3 +54,6 @@
 .\objects\peripheral_device.o: ..\User\peripheral_device_h\ventilator.h
 .\objects\peripheral_device.o: ..\User\peripheral_device_h\water_sprayer.h
 .\objects\peripheral_device.o: ..\User\peripheral_device_h\alarm.h
+.\objects\peripheral_device.o: ..\User\peripheral_device_h\sensor_L432.h
+.\objects\peripheral_device.o: ..\User\peripheral_device_h\i2c_gpio.h
+.\objects\peripheral_device.o: ..\User\peripheral_device_h\oled.h

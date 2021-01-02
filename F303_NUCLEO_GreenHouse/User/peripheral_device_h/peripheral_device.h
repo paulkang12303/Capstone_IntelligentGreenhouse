@@ -9,6 +9,9 @@
 #include "ventilator.h"
 #include "water_sprayer.h"
 #include "alarm.h"
+#include "sensor_L432.h"
+#include "i2c_gpio.h"
+#include "oled.h"
 
 void PeripheralDevices_Init(void);
 

@@ -44,16 +44,16 @@ void CCS811_Config(void)
 			}
 			else
 			{
-				printf("id=%d,correct %d!\r\n", Information[0], ID_Count);
+//				printf("id=%d,correct %d!\r\n", Information[0], ID_Count);
 			}
 		}
 		else
 		{
-			printf("id=%d,incorrect,continuing...\r\n", Information[0]);
+//			printf("id=%d,incorrect,continuing...\r\n", Information[0]);
 		}
 		CCS811_STEP_DELAY();
 	}
-	printf("id correct,initing...\r\n");
+//	printf("id correct,initing...\r\n");
 	CCS811_STEP_DELAY();
 	I2C_BUS_2_ReadDevice_Pre(CCS811_Add,0x23);
 	I2C_BUS_2_ReadDevice_Post(CCS811_Add,&Information[1],2);
@@ -71,14 +71,14 @@ void CCS811_Config(void)
 		while(!(Status & 0x80)) // if firmware not in application mode but boot mode.
 		{
 			I2C_BUS_2_WriteDevide_SingleByte(CCS811_Add, 0xF3, 0xF0);	      // Application Verify
-			printf("trying to transition the CCS811 state from boot to application mode...\r\n");
+//			printf("trying to transition the CCS811 state from boot to application mode...\r\n");
 			I2C_BUS_2_WriteDevice(CCS811_Add, 0xF4, &temp, 0);	//Used to transition the CCS811 state from boot to application mode, a write with no data is required.
 			CCS811_STEP_DELAY();
 			I2C_BUS_2_ReadDevice_Pre(CCS811_Add,0x00);
 			I2C_BUS_2_ReadDevice_Post(CCS811_Add,&Status,1);
 			CCS811_STEP_DELAY();
 		}
-		printf("CCS811 is already in application mode!\r\n");
+//		printf("CCS811 is already in application mode!\r\n");
 	}	
 	CCS811_STEP_DELAY();
 	I2C_BUS_2_ReadDevice_Pre(CCS811_Add,0x01);
@@ -93,7 +93,7 @@ void CCS811_Config(void)
 		I2C_BUS_2_ReadDevice_Pre(CCS811_Add,0x01);
 		I2C_BUS_2_ReadDevice_Post(CCS811_Add,&MeasureMode,1);
 		MeasureMode &= 0x70;
-		printf("trying to enter measure mode...\r\n");
+//		printf("trying to enter measure mode...\r\n");
 		CCS811_STEP_DELAY();
 	}
 	CCS811_STEP_DELAY();
@@ -108,7 +108,8 @@ void CCS811_Config(void)
 	CCS811_STEP_DELAY();
 	I2C_BUS_2_ReadDevice_Pre(CCS811_Add,0xE0);
 	I2C_BUS_2_ReadDevice_Post(CCS811_Add,&Error_ID,1);	
-	printf("status=%d error_id=%d measureMode=%d \r\n", Status, Error_ID, MeasureMode);
+//	printf("status=%d error_id=%d measureMode=%d \r\n", Status, Error_ID, MeasureMode);
+	DEBUG_LED_ON();
 	
 }
 

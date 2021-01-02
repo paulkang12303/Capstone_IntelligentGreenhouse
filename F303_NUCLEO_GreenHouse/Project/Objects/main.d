@@ -33,6 +33,7 @@
 .\objects\main.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_wwdg.h
 .\objects\main.o: ..\Library\STM32F30x_StdPeriph_Driver\inc\stm32f30x_misc.h
 .\objects\main.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\main.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\main.o: ..\FreeRTOS\include\FreeRTOS.h
 .\objects\main.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 .\objects\main.o: ..\User\FreeRTOSConfig.h
@@ -61,3 +62,6 @@
 .\objects\main.o: ..\User\peripheral_device_h\ventilator.h
 .\objects\main.o: ..\User\peripheral_device_h\water_sprayer.h
 .\objects\main.o: ..\User\peripheral_device_h\alarm.h
+.\objects\main.o: ..\User\peripheral_device_h\sensor_L432.h
+.\objects\main.o: ..\User\peripheral_device_h\i2c_gpio.h
+.\objects\main.o: ..\User\peripheral_device_h\oled.h

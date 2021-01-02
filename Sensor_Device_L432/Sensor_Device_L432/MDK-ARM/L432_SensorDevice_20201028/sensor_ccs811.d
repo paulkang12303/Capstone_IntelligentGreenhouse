@@ -39,4 +39,15 @@ l432_sensordevice_20201028\sensor_ccs811.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/
 l432_sensordevice_20201028\sensor_ccs811.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
 l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/bsp_uart.h
 l432_sensordevice_20201028\sensor_ccs811.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/bsp_led.h
+l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/main.h
+l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/timer.h
+l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/exti.h
+l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/bsp_led.h
+l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/sensor_CCS811.h
+l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/sensor_bh1750.h
+l432_sensordevice_20201028\sensor_ccs811.o: C:\B_ElectronicsCAD\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/i2c_gpio.h
+l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/sensor_hdc1080.h
+l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/sensor_soilmoisture.h
+l432_sensordevice_20201028\sensor_ccs811.o: ../Inc/adc.h

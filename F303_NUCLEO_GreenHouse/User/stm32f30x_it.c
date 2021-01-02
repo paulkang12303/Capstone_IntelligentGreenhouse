@@ -78,16 +78,28 @@ void SysTick_Handler(void)
 }
 
 
-void USART2_IRQHandler(void)
+void UART4_IRQHandler(void)
 {
 	portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
 	uint8_t Rx_Byte;
 
-	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+	if(USART_GetITStatus(UART4, USART_IT_RXNE) != RESET)
 	{	
-		Rx_Byte = USART_ReceiveData(USART2);
+		Rx_Byte = USART_ReceiveData(UART4);
 		xQueueSendToBackFromISR(Queue_Handle_RxData, &Rx_Byte, &xHigherPriorityTaskWoken);
 		portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
 	} 
 }
 
+//void USART2_IRQHandler(void)
+//{
+//	portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+//	uint8_t Rx_Byte;
+
+//	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+//	{	
+//		Rx_Byte = USART_ReceiveData(USART2);
+//		xQueueSendToBackFromISR(Queue_Handle_RxData, &Rx_Byte, &xHigherPriorityTaskWoken);
+//		portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
+//	} 
+//}

@@ -17,5 +17,4 @@ extern UART_HandleTypeDef DebugUART;
 
 void DEBUG_UART_Config(void);
 void sendByte_via(UART_HandleTypeDef *huart,uint8_t *data_TX);
-void sendString_via(UART_HandleTypeDef *huart,uint8_t *data_TX);
 #endif

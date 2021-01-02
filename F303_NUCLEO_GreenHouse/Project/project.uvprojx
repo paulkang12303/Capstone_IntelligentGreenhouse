@@ -556,11 +556,6 @@
               <FilePath>..\User\peripheral_device_c\lamp.c</FilePath>
             </File>
             <File>
-              <FileName>uln2003_28BYJ_48.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\peripheral_device_c\uln2003_28BYJ_48.c</FilePath>
-            </File>
-            <File>
               <FileName>airconditioner.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\peripheral_device_c\airconditioner.c</FilePath>
@@ -581,6 +576,31 @@
               <FilePath>..\User\peripheral_device_c\ventilator.c</FilePath>
             </File>
             <File>
+              <FileName>water_sprayer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\water_sprayer.c</FilePath>
+            </File>
+            <File>
+              <FileName>oled.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\oled.c</FilePath>
+            </File>
+            <File>
+              <FileName>uln2003_28BYJ_48.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\uln2003_28BYJ_48.c</FilePath>
+            </File>
+            <File>
+              <FileName>sensor_L432.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\peripheral_device_c\sensor_L432.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp_usart\bsp_usart.c</FilePath>
+            </File>
+            <File>
               <FileName>bsp_key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\bsp_key\bsp_key.c</FilePath>
@@ -591,14 +611,9 @@
               <FilePath>..\User\bsp_led\bsp_led.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_usart.c</FileName>
+              <FileName>i2c_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\bsp_usart\bsp_usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>water_sprayer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\peripheral_device_c\water_sprayer.c</FilePath>
+              <FilePath>..\User\peripheral_device_c\i2c_gpio.c</FilePath>
             </File>
           </Files>
         </Group>

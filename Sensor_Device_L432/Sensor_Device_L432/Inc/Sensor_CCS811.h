@@ -4,6 +4,7 @@
 # include "stm32l4xx_hal.h"
 
 #include "bsp_uart.h"
+#include "bsp_led.h"
 #include "i2c_gpio.h"
 
 #define CCS811_Add      		0x5A<<1

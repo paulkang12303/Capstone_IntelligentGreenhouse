@@ -11,6 +11,9 @@ void PeripheralDevices_Init(void)
 	Ventilator_Config();
 	Water_Sprayer_Config();
 	ALARM_Config();
+	sensor_l432_Config();
+	I2C_BUS_1_Config();
+	OLED_Init();
 }
 
 

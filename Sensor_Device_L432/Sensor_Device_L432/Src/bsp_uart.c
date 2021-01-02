@@ -53,12 +53,5 @@ void sendByte_via(UART_HandleTypeDef *huart,uint8_t *data_TX)
 	HAL_UART_Transmit(huart, data_TX, 1, 0xFFFF);
 }
 
-void sendString_via(UART_HandleTypeDef *huart,uint8_t *data_TX)
-{
-	while(*data_TX)
-	{
-		HAL_UART_Transmit(huart,(uint8_t *)data_TX++,1,0xFFFF);
-	}
-}
 
 
